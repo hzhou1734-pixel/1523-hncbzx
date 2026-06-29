@@ -1,0 +1,2683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>湖南出版中心</title>
+<style>
+  :root {
+    --green-50: #F2FAF5;
+    --green-100: #E0F4E8;
+    --green-200: #B8E6CC;
+    --green-300: #84D4A4;
+    --green-400: #52C27E;
+    --green-500: #3DAD68;
+    --green-600: #2D8F51;
+    --green-700: #1F7040;
+    --mint-50: #F0FCF6;
+    --mint-100: #DEF7EC;
+    --warm-bg: #FAFBF8;
+    --text-primary: #1B2E23;
+    --text-secondary: #5A7265;
+    --text-muted: #98ABA0;
+    --card-bg: #FFFFFF;
+    --border: #E8EDEA;
+    --border-active: #B8E6CC;
+    --shadow-xs: 0 1px 2px rgba(29,62,38,0.04);
+    --shadow-sm: 0 2px 8px rgba(29,62,38,0.06);
+    --shadow-md: 0 6px 20px rgba(29,62,38,0.08);
+    --shadow-lg: 0 12px 36px rgba(29,62,38,0.10);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 22px;
+    --tab-height: 62px;
+    --header-height: 50px;
+    --form-item-gap: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(180deg, #E8EDEA 0%, #DDE6DF 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: var(--warm-bg);
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 2px #1a1a1a;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 44px;
+    background: var(--green-500);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 26px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Header */
+  .app-header {
+    height: var(--header-height);
+    background: var(--green-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+  }
+  .app-header .back-btn {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.15s;
+    font-size: 22px;
+    color: white;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .app-header .back-btn:active { background: rgba(255,255,255,0.25); transform: translateY(-50%) scale(0.85); }
+
+  /* Content area */
+  .content-area {
+    height: calc(844px - 44px - var(--header-height) - var(--tab-height));
+    overflow-y: auto; overflow-x: hidden;
+    position: relative;
+    scroll-behavior: smooth;
+  }
+  .content-area::-webkit-scrollbar { width: 0; }
+
+  /* Page container */
+  .page {
+    display: none;
+    padding: 18px 16px;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .page.active { display: block; }
+  .page.sub-page {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--warm-bg); z-index: 10; padding: 18px 16px;
+    overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .page.sub-page::-webkit-scrollbar { width: 0; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Page title area */
+  .page-header { margin-bottom: 18px; }
+  .page-header h2 { font-size: 22px; color: var(--text-primary); margin-bottom: 4px; font-weight: 700; }
+  .page-header p { font-size: 13px; color: var(--text-muted); }
+
+  /* Bottom tab bar */
+  .tab-bar {
+    height: var(--tab-height);
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 20;
+    padding-bottom: 2px;
+  }
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    gap: 3px;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .tab-item.active { color: var(--green-500); }
+  .tab-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 24px; height: 3px;
+    background: var(--green-500);
+    border-radius: 0 0 3px 3px;
+  }
+  .tab-item:active { transform: scale(0.9); opacity: 0.7; }
+  .tab-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+  .tab-icon svg { width: 22px; height: 22px; }
+  .tab-label { font-size: 11px; font-weight: 500; }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-xs);
+    border: 1px solid var(--border);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+  }
+  .card:active { transform: scale(0.97); box-shadow: var(--shadow-md); border-color: var(--border-active); background: #f8fdf9; }
+
+  /* Activity card */
+  .activity-card .cover {
+    width: 100%;
+    height: 150px;
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  .activity-card .cover svg { width: 100%; height: 100%; }
+  .activity-card .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .activity-card .tag.active { background: var(--green-100); color: var(--green-600); }
+  .activity-card .tag.ended { background: #F2F3F5; color: #ABB5AE; }
+  .activity-card.ended-card { opacity: 0.5; }
+  .activity-card.ended-card .cover { filter: grayscale(0.6); }
+  .activity-card h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 6px; font-weight: 600; }
+  .activity-card .meta { font-size: 13px; color: var(--text-secondary); display: flex; gap: 14px; flex-wrap: wrap; }
+  .activity-card .meta span { display: flex; align-items: center; gap: 3px; }
+
+  /* Course card */
+  .course-card .cover {
+    width: 100%;
+    height: 120px;
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .course-card .cover svg { width: 100%; height: 100%; }
+  .course-card h4 { font-size: 15px; color: var(--text-primary); line-height: 1.4; font-weight: 600; }
+  .course-type-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+
+  /* Filter chips */
+  .filter-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+  .filter-row {
+    white-space: nowrap; margin-bottom: 10px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px;
+  }
+  .filter-row::-webkit-scrollbar { height: 0; }
+  .filter-chip {
+    display: inline-flex; align-items: center; vertical-align: middle;
+    margin-right: 8px;
+    padding: 7px 16px; border-radius: 22px; font-size: 13px;
+    white-space: nowrap; cursor: pointer;
+    background: var(--card-bg); color: var(--text-secondary);
+    border: 1.5px solid var(--border);
+    transition: all 0.2s; font-weight: 500;
+    -webkit-tap-highlight-color: transparent;
+    position: relative; overflow: hidden; user-select: none;
+  }
+  .filter-chip.selected {
+    background: var(--green-500); color: white; border-color: var(--green-500);
+    box-shadow: 0 2px 8px rgba(61,173,104,0.25);
+  }
+  .filter-chip:active { transform: scale(0.92); background: var(--green-100); }
+  .filter-chip.selected:active { transform: scale(0.92); background: var(--green-600); }
+
+  /* Timeline — Scroll Style (Refined) */
+  .timeline-scroll-wrap {
+    background: linear-gradient(180deg, #F9F6EE 0%, #F5F2EA 50%, #EEEBE3 100%);
+    padding: 0 0 20px; position: relative;
+  }
+  /* Watermark texture */
+  .timeline-scroll-wrap::before {
+    content: ''; position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 200px 100px at 20% 10%, rgba(61,173,104,0.03) 0%, transparent 70%),
+      radial-gradient(ellipse 150px 80px at 80% 30%, rgba(61,173,104,0.02) 0%, transparent 70%),
+      radial-gradient(ellipse 180px 90px at 60% 70%, rgba(61,173,104,0.02) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .timeline-hero {
+    margin: -4px -16px 0; padding: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.10'%3E%3Cpath d='M60 12c-2-4-6-4-8-2-3 3-2 8 2 10 1 1 2 2 2 3 0 2-2 3-4 2-3-1-5-5-4-8' fill='none' stroke='%2384D4A4' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M60 56c2 4 6 4 8 2 3-3 2-8-2-10-1-1-2-2-2-3 0-2 2-3 4-2 3 1 5 5 4 8' fill='none' stroke='%2384D4A4' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M12 60c-4 2-4 6-2 8 3 3 8 2 10-2 1-1 2-2 3-2 2 0 3 2 2 4-1 3-5 5-8 4' fill='none' stroke='%2384D4A4' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M56 60c4 2 4 6 2 8-3 3-8 2-10-2-1-1-2-2-3-2-2 0-3 2-2 4 1 3 5 5 8 4' fill='none' stroke='%2384D4A4' stroke-width='1' stroke-linecap='round'/%3E%3Ccircle cx='60' cy='34' r='1.5' fill='%2393DEAC'/%3E%3Ccircle cx='34' cy='60' r='1.5' fill='%2393DEAC'/%3E%3Ccircle cx='86' cy='60' r='1.5' fill='%2393DEAC'/%3E%3Ccircle cx='60' cy='86' r='1.5' fill='%2393DEAC'/%3E%3Cpath d='M20 20c-3-3-8-3-10 0-3 4 1 9 5 8 2 0 3 1 3 3 0 3-3 4-5 2-1-2-2-5 0-7M100 20c3-3 8-3 10 0 3 4-1 9-5 8-2 0-3 1-3 3 0 3 3 4 5 2 1-2 2-5 0-7M20 100c-3 3-3 8 0 10 4 3 9-1 8-5 0-2 1-3 3-3 3 0 4 3 2 5-2 1-5 2-7 0M100 100c3 3 3 8 0 10-4 3-9-1-8-5 0-2-1-3-3-3-3 0-4 3-2 5 2 1 5 2 7 0' fill='none' stroke='%2384D4A4' stroke-width='0.7' stroke-linecap='round'/%3E%3C/g%3E%3Cg opacity='0.06'%3E%3Cline x1='60' y1='0' x2='60' y2='120' stroke='%2393DEAC' stroke-width='0.5' stroke-dasharray='1,8'/%3E%3Cline x1='0' y1='60' x2='120' y2='60' stroke='%2393DEAC' stroke-width='0.5' stroke-dasharray='1,8'/%3E%3C/g%3E%3C/svg%3E") repeat,
+      linear-gradient(180deg, #F8F4EC 0%, #F2EDE0 50%, #EEE8D8 100%);
+    position: relative; z-index: 2; text-align: center; overflow: visible;
+  }
+  /* Dark overlay so white text stays readable above the pattern */
+  .timeline-hero::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(10, 28, 18, 0.94) 0%,
+      rgba(18, 40, 28, 0.90) 30%,
+      rgba(24, 50, 36, 0.84) 60%,
+      rgba(30, 58, 42, 0.72) 100%);
+  }
+  /* Decorative cloud motifs */
+  .timeline-hero .hero-cloud-l {
+    position: absolute; left: 8px; top: 44px; width: 56px; height: 34px;
+    opacity: 0.13; pointer-events: none; z-index: 3;
+  }
+  .timeline-hero .hero-cloud-r {
+    position: absolute; right: 10px; top: 28px; width: 52px; height: 30px;
+    opacity: 0.10; pointer-events: none; z-index: 3;
+  }
+  /* Decorative scattered dots */
+  .timeline-hero .hero-dots {
+    position: absolute; inset: 0; opacity: 0.12; pointer-events: none; z-index: 3;
+  }
+  /* Bottom wave transition — blends hero into patterned body background */
+  .timeline-hero::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 52px;
+    background:
+      url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.14'%3E%3Cpath d='M60 12c-2-4-6-4-8-2-3 3-2 8 2 10 1 1 2 2 2 3 0 2-2 3-4 2-3-1-5-5-4-8' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M60 56c2 4 6 4 8 2 3-3 2-8-2-10-1-1-2-2-2-3 0-2 2-3 4-2 3 1 5 5 4 8' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M12 60c-4 2-4 6-2 8 3 3 8 2 10-2 1-1 2-2 3-2 2 0 3 2 2 4-1 3-5 5-8 4' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M56 60c4 2 4 6 2 8-3 3-8 2-10-2-1-1-2-2-3-2-2 0-3 2-2 4 1 3 5 5 8 4' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='60' cy='34' r='2' fill='%236CC686'/%3E%3Ccircle cx='34' cy='60' r='2' fill='%236CC686'/%3E%3Ccircle cx='86' cy='60' r='2' fill='%236CC686'/%3E%3Ccircle cx='60' cy='86' r='2' fill='%236CC686'/%3E%3Cpath d='M20 20c-3-3-8-3-10 0-3 4 1 9 5 8 2 0 3 1 3 3 0 3-3 4-5 2-1-2-2-5 0-7M100 20c3-3 8-3 10 0 3 4-1 9-5 8-2 0-3 1-3 3 0 3 3 4 5 2 1-2 2-5 0-7M20 100c-3 3-3 8 0 10 4 3 9-1 8-5 0-2 1-3 3-3 3 0 4 3 2 5-2 1-5 2-7 0M100 100c3 3 3 8 0 10-4 3-9-1-8-5 0-2-1-3-3-3-3 0-4 3-2 5 2 1 5 2 7 0' fill='none' stroke='%235BAF74' stroke-width='0.8' stroke-linecap='round'/%3E%3C/g%3E%3Cg opacity='0.08'%3E%3Cline x1='60' y1='0' x2='60' y2='120' stroke='%235BAF74' stroke-width='0.6' stroke-dasharray='1,8'/%3E%3Cline x1='0' y1='60' x2='120' y2='60' stroke='%235BAF74' stroke-width='0.6' stroke-dasharray='1,8'/%3E%3C/g%3E%3C/svg%3E") repeat,
+      linear-gradient(180deg, #EEE8D8 0%, #F2EDE0 55%, #F8F4EC 100%);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 52' preserveAspectRatio='none'%3E%3Cpath d='M0 52 Q40 16 80 24 Q120 32 160 18 Q200 5 240 16 Q280 28 320 14 Q360 0 400 12 L400 52Z' fill='white'/%3E%3Cpath d='M0 52 Q60 24 120 34 Q180 44 240 28 Q300 12 360 24 Q380 28 400 22 L400 52Z' fill='white'/%3E%3Cpath d='M0 52 Q80 36 160 44 Q240 52 320 38 Q360 32 400 36 L400 52Z' fill='white'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 52' preserveAspectRatio='none'%3E%3Cpath d='M0 52 Q40 16 80 24 Q120 32 160 18 Q200 5 240 16 Q280 28 320 14 Q360 0 400 12 L400 52Z' fill='white'/%3E%3Cpath d='M0 52 Q60 24 120 34 Q180 44 240 28 Q300 12 360 24 Q380 28 400 22 L400 52Z' fill='white'/%3E%3Cpath d='M0 52 Q80 36 160 44 Q240 52 320 38 Q360 32 400 36 L400 52Z' fill='white'/%3E%3C/svg%3E");
+    mask-size: 100% 52px;
+    -webkit-mask-size: 100% 52px;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: bottom;
+    -webkit-mask-position: bottom;
+    z-index: 2;
+  }
+  .timeline-hero-body {
+    padding: 32px 20px 44px; position: relative; z-index: 3;
+  }
+  /* Ornamental divider above title */
+  .tl-ornament-top {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .tl-ornament-top .orn-line {
+    width: 32px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(160,232,184,0.45), transparent);
+  }
+  .tl-ornament-top .orn-diamond {
+    width: 7px; height: 7px; background: rgba(160,232,184,0.50);
+    transform: rotate(45deg); border-radius: 1px;
+    box-shadow: 0 0 6px rgba(132,212,164,0.30);
+  }
+  /* Seal — intricate traditional Chinese stamp style */
+  .tl-seal {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 64px; height: 64px; position: relative;
+    margin-bottom: 20px;
+  }
+  .tl-seal-outer {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 1px solid rgba(132,212,164,0.30);
+    position: absolute; inset: 0;
+  }
+  .tl-seal-middle {
+    width: 54px; height: 54px; border-radius: 50%;
+    border: 1.5px dashed rgba(132,212,164,0.28);
+    position: absolute; top: 5px; left: 5px;
+  }
+  .tl-seal-inner {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px solid rgba(160,232,184,0.55);
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: 10px; left: 10px;
+    background: radial-gradient(circle at 42% 35%, rgba(132,212,164,0.18), transparent 65%);
+  }
+  .tl-seal-inner span {
+    color: #B5EEC8; font-size: 16px; font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.35), 0 0 12px rgba(132,212,164,0.15);
+  }
+  /* Corner seal accents */
+  .tl-seal .seal-accent {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(160,232,184,0.40);
+    box-shadow: 0 0 4px rgba(132,212,164,0.25);
+  }
+  .tl-seal .seal-accent.tl { top: 22px; left: 8px; }
+  .tl-seal .seal-accent.tr { top: 22px; right: 8px; }
+  .tl-seal .seal-accent.bl { bottom: 22px; left: 8px; }
+  .tl-seal .seal-accent.br { bottom: 22px; right: 8px; }
+  /* Title */
+  .timeline-hero h2 {
+    font-size: 32px; font-weight: 900; color: #FFFFFF; margin: 0;
+    letter-spacing: 12px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.30);
+    position: relative; display: inline-block;
+  }
+  /* Ornamental divider below title */
+  .tl-ornament-bot {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin: 16px 0 10px;
+  }
+  .tl-ornament-bot .orn-line {
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(160,232,184,0.40), transparent);
+  }
+  .tl-ornament-bot .orn-bracket {
+    color: rgba(160,232,184,0.35); font-size: 14px; line-height: 1;
+  }
+  .timeline-hero .hero-sub {
+    font-size: 10px; color: rgba(255,255,255,0.32);
+    letter-spacing: 6px; margin-top: 8px; font-weight: 300;
+    text-transform: uppercase;
+  }
+  /* Timeline body — patterned background with traditional motif */
+  .timeline-body-wrap {
+    position: relative; z-index: 1;
+    background:
+      url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.14'%3E%3Cpath d='M60 12c-2-4-6-4-8-2-3 3-2 8 2 10 1 1 2 2 2 3 0 2-2 3-4 2-3-1-5-5-4-8' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M60 56c2 4 6 4 8 2 3-3 2-8-2-10-1-1-2-2-2-3 0-2 2-3 4-2 3 1 5 5 4 8' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M12 60c-4 2-4 6-2 8 3 3 8 2 10-2 1-1 2-2 3-2 2 0 3 2 2 4-1 3-5 5-8 4' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M56 60c4 2 4 6 2 8-3 3-8 2-10-2-1-1-2-2-3-2-2 0-3 2-2 4 1 3 5 5 8 4' fill='none' stroke='%23448E59' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='60' cy='34' r='2' fill='%236CC686'/%3E%3Ccircle cx='34' cy='60' r='2' fill='%236CC686'/%3E%3Ccircle cx='86' cy='60' r='2' fill='%236CC686'/%3E%3Ccircle cx='60' cy='86' r='2' fill='%236CC686'/%3E%3Cpath d='M20 20c-3-3-8-3-10 0-3 4 1 9 5 8 2 0 3 1 3 3 0 3-3 4-5 2-1-2-2-5 0-7M100 20c3-3 8-3 10 0 3 4-1 9-5 8-2 0-3 1-3 3 0 3 3 4 5 2 1-2 2-5 0-7M20 100c-3 3-3 8 0 10 4 3 9-1 8-5 0-2 1-3 3-3 3 0 4 3 2 5-2 1-5 2-7 0M100 100c3 3 3 8 0 10-4 3-9-1-8-5 0-2-1-3-3-3-3 0-4 3-2 5 2 1 5 2 7 0' fill='none' stroke='%235BAF74' stroke-width='0.8' stroke-linecap='round'/%3E%3C/g%3E%3Cg opacity='0.08'%3E%3Cline x1='60' y1='0' x2='60' y2='120' stroke='%235BAF74' stroke-width='0.6' stroke-dasharray='1,8'/%3E%3Cline x1='0' y1='60' x2='120' y2='60' stroke='%235BAF74' stroke-width='0.6' stroke-dasharray='1,8'/%3E%3C/g%3E%3C/svg%3E") repeat,
+      linear-gradient(180deg, #F8F4EC 0%, #F2EDE0 50%, #EEE8D8 100%);
+    padding: 26px 16px 32px;
+  }
+  .timeline-modern {
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .tl-node {
+    position: relative;
+  }
+  /* Year header row */
+  .tl-trigger {
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    user-select: none; margin-bottom: 14px;
+    padding: 2px 0;
+  }
+  .tl-year-big {
+    font-size: 28px; font-weight: 900; color: #1A3322;
+    letter-spacing: 1px;
+    display: flex; align-items: baseline; gap: 6px;
+    text-shadow: 0 1px 2px rgba(26,51,34,0.06);
+  }
+  .tl-year-suffix {
+    font-size: 15px; font-weight: 600; color: #5BAF74;
+    letter-spacing: 1px;
+  }
+  .tl-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-size: 13px; color: #5BAF74;
+    background: rgba(91,175,116,0.10);
+    transition: transform 0.3s ease;
+    box-shadow: 0 1px 2px rgba(91,175,116,0.08);
+  }
+  .tl-node.collapsed .tl-arrow {
+    transform: rotate(-90deg);
+    background: rgba(91,175,116,0.16);
+  }
+  /* Event card */
+  .tl-card-scroll {
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 1.5px solid #E8E3D4;
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.04),
+      0 6px 18px rgba(0,0,0,0.03);
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
+    max-height: 600px; opacity: 1;
+  }
+  .tl-node.collapsed .tl-card-scroll {
+    max-height: 0; opacity: 0; border-width: 0; box-shadow: none;
+  }
+  /* Thin green top accent bar on each card */
+  .tl-card-scroll::before {
+    content: ''; display: block; height: 3px;
+    background: linear-gradient(90deg, #5BAF74, #7ECF93, #5BAF74);
+    opacity: 0.6;
+  }
+  .tl-node.collapsed .tl-card-scroll::before { height: 0; }
+  .tl-card-inner {
+    display: flex; gap: 18px; align-items: flex-start;
+    padding: 20px 18px 22px;
+  }
+  .tl-content-left { flex: 1; min-width: 0; }
+  .tl-events-scroll ol {
+    list-style: none; counter-reset: tl-counter; margin: 0; padding: 0;
+  }
+  .tl-events-scroll ol li {
+    counter-increment: tl-counter;
+    font-size: 14px; color: #444F3C; line-height: 1.85;
+    padding: 6px 0 6px 32px; position: relative;
+    letter-spacing: 0.3px;
+  }
+  .tl-events-scroll ol li::before {
+    content: counter(tl-counter);
+    position: absolute; left: 0; top: 5px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(145deg, #5BAF74 0%, #448E59 100%);
+    color: #FFFFFF; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 22px;
+    box-shadow: 0 1px 3px rgba(68,142,89,0.25);
+    letter-spacing: 0;
+  }
+  /* Illustration — no background frame, shadow + stroke effect */
+  .tl-illus-scroll {
+    width: 80px; height: 80px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent;
+  }
+  .tl-illus-scroll svg {
+    width: 64px; height: 64px; display: block;
+    filter:
+      drop-shadow(0 2px 6px rgba(29,62,38,0.18))
+      drop-shadow(0 0 1px rgba(29,62,38,0.12));
+  }
+  /* Latest year card — prominent green accent */
+  .tl-node:first-child .tl-year-big {
+    color: #0F4D26; font-size: 30px;
+    text-shadow: 0 1px 3px rgba(15,77,38,0.08);
+  }
+  .tl-node:first-child .tl-card-scroll {
+    border-color: #B8DEC6;
+    box-shadow:
+      0 2px 8px rgba(61,154,90,0.08),
+      0 8px 24px rgba(61,154,90,0.06);
+  }
+  .tl-node:first-child .tl-card-scroll::before {
+    background: linear-gradient(90deg, #3D9A5A, #6CC686, #3D9A5A);
+    height: 4px; opacity: 0.85;
+  }
+  .tl-node:first-child .tl-events-scroll ol li::before {
+    background: linear-gradient(145deg, #3D9A5A 0%, #2D8743 100%);
+    box-shadow: 0 1px 4px rgba(45,135,67,0.35);
+  }
+  .tl-node:first-child .tl-illus-scroll svg {
+    filter:
+      drop-shadow(0 2px 8px rgba(27,80,50,0.22))
+      drop-shadow(0 0 1.5px rgba(27,80,50,0.15));
+  }
+
+  /* Function grid */
+  .func-grid { display: flex; flex-direction: column; gap: 14px; }
+  .func-card {
+    background: white; border-radius: var(--radius-lg); padding: 20px 18px;
+    border: 1px solid var(--border); box-shadow: var(--shadow-xs);
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; align-items: center; gap: 16px;
+    -webkit-tap-highlight-color: transparent;
+    position: relative; overflow: hidden; user-select: none;
+  }
+  .func-card:active { transform: scale(0.97); border-color: var(--border-active); box-shadow: var(--shadow-md); background: #f8fdf9; }
+  .func-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .func-icon.eval { background: linear-gradient(135deg, #E0F4E8, #D0F0DC); }
+  .func-icon.swap { background: linear-gradient(135deg, #FFF0E0, #FFE8D0); }
+  .func-icon.feedback { background: linear-gradient(135deg, #E0ECFF, #D0E0FF); }
+  .func-icon svg { width: 30px; height: 30px; }
+  .func-info { flex: 1; }
+  .func-info h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 3px; font-weight: 600; }
+  .func-info p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+  .func-arrow { color: var(--text-muted); flex-shrink: 0; }
+
+  /* Form styles */
+  .form-group { margin-bottom: var(--form-item-gap); }
+  .form-label {
+    display: block; font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;
+  }
+  .form-label .required { color: #E05555; margin-left: 2px; }
+  .question-text .required { color: #E05555; margin-right: 2px; }
+  .required { color: #E05555; }
+  .form-label .optional { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-left: 6px; }
+  .form-input, .form-textarea, .form-select {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    font-size: 14px; color: var(--text-primary); background: var(--card-bg);
+    transition: all 0.2s; outline: none; font-family: inherit;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--green-400); box-shadow: 0 0 0 4px rgba(61,173,104,0.08);
+  }
+  .form-textarea { min-height: 100px; resize: vertical; }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+  .form-select {
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2398ABA0' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    padding-right: 40px; cursor: pointer;
+  }
+
+  /* 效果评估表单 */
+  #page-eval .form-section { background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:18px;margin-bottom:14px; }
+  #page-eval .section-title { font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding-bottom:10px;border-bottom:1.5px solid #E8ECEA;display:flex;align-items:center;gap:8px; }
+  #page-eval .section-title::before { content:'';width:4px;height:18px;border-radius:2px;background:var(--green-500);flex-shrink:0; }
+  #page-eval .eval-question { margin-bottom:18px; }
+  #page-eval .eval-question:last-child { margin-bottom:0; }
+  #page-eval .question-text { font-size:14px;color:var(--text-primary);margin-bottom:10px;line-height:1.6;font-weight:500; }
+
+  /* 单选题 pills（ABCD） */
+  #page-eval .radio-group { display:flex;gap:10px;flex-wrap:wrap; }
+  #page-eval .radio-inline {
+    font-size:14px; font-weight:500; color: var(--text-secondary);
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border: none; border-radius: 24px;
+    cursor: pointer; transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+    -webkit-tap-highlight-color: transparent; background: #FAFBFA;
+    user-select: none; position: relative; overflow: hidden;
+  }
+  #page-eval .radio-inline:active { transform: scale(0.95); }
+  #page-eval .radio-inline:has(input:checked) {
+    background: #E7F7EC;
+    color: #2D8A4E; font-weight: 700;
+    box-shadow: 0 2px 8px rgba(61,173,104,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+    transform: translateY(-1px);
+  }
+  #page-eval .radio-inline:not(:has(input:checked)):hover {
+    background: #F4F7F5;
+  }
+  #page-eval .radio-inline input { accent-color: var(--green-500); margin:0; width:15px; height:15px; }
+  #page-eval .radio-inline input:checked { accent-color: var(--green-500); }
+
+  /* 多选卡片 */
+  #page-eval .checkbox-group { display:flex; flex-direction:column; gap:6px; }
+  #page-eval .checkbox-item {
+    font-size:14px; color: var(--text-secondary); font-weight: 400;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; padding: 12px 14px; border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+    border: 1.5px solid #E8ECEA; background: #FAFBFA;
+    position: relative; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #page-eval .checkbox-item:active { transform: scale(0.98); }
+  #page-eval .checkbox-item:hover {
+    border-color: #C4D2C8; background: #F4F7F5;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  #page-eval .checkbox-item:has(input:checked) {
+    background: #E7F7EC; border-color: var(--green-400);
+    color: var(--green-600); font-weight: 600;
+    box-shadow: 0 2px 8px rgba(61,173,104,0.12);
+    padding-left: 16px;
+  }
+  #page-eval .checkbox-item input {
+    accent-color: var(--green-500); margin:0; flex-shrink:0;
+    width:18px; height:18px;
+  }
+
+  /* 培训科目单列 */
+  #page-eval .radio-group-vertical { display:flex;flex-direction:column;gap:6px; }
+  #page-eval .radio-item {
+    font-size:14px; color: var(--text-secondary); font-weight: 400;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; cursor: pointer;
+    border-radius: 10px; transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+    border: none;
+    background: #FAFBFA; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #page-eval .radio-item:active { transform:scale(0.98); }
+  #page-eval .radio-item:hover {
+    background: #F4F7F5;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  #page-eval .radio-item:has(input:checked) {
+    color: var(--green-600); background: #E7F7EC;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(61,173,104,0.12);
+  }
+  #page-eval .radio-item input {
+    accent-color: var(--green-500); margin:0; flex-shrink:0;
+    width:18px; height:18px;
+  }
+
+  /* 活动选择弹窗 */
+  .picker-overlay { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:1000;display:flex;align-items:flex-end;justify-content:center; }
+  .picker-overlay.hidden { display:none; }
+  .picker-sheet { background:#fff;border-radius:18px 18px 0 0;width:390px;max-width:100%;max-height:60vh;overflow-y:auto;padding:0 0 20px;animation:slideUp 0.25s ease; }
+  @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
+  .picker-header { display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff;z-index:1; }
+  .picker-title { font-size:16px;font-weight:700;color:var(--text-primary); }
+  .picker-close { background:none;border:none;font-size:14px;color:var(--text-muted);cursor:pointer;padding:4px 8px; }
+  .picker-item { padding:14px 18px;font-size:14px;color:var(--text-primary);cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;display:flex;align-items:center;justify-content:space-between; }
+  .picker-item:active { background:var(--green-50); }
+  .picker-item.selected { color:var(--green-600);font-weight:600; }
+  .picker-item.selected::after { content:'✓';font-weight:700;color:var(--green-500); }
+  .form-select option { color: var(--text-primary); }
+  .form-select option[value=""] { color: var(--text-muted); }
+
+  /* 省市区三级联动弹窗 */
+  .addr-picker-columns { display:flex;height:340px;overflow:hidden; }
+  .addr-picker-col { flex:1;border-right:1px solid var(--border);overflow-y:auto;-webkit-overflow-scrolling:touch; }
+  .addr-picker-col:last-child { border-right:none; }
+  .addr-col-title { font-size:12px;color:var(--text-muted);text-align:center;padding:10px 0 6px;position:sticky;top:0;background:#fff;z-index:1;border-bottom:1px solid var(--border);font-weight:600; }
+  .addr-col-item { padding:12px 8px;font-size:13px;color:var(--text-secondary);text-align:center;cursor:pointer;transition:all 0.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .addr-col-item:active { background:var(--green-50); }
+  .addr-col-item.selected { color:var(--green-600);background:#E7F7EC;font-weight:700; }
+
+  .cascade-row { display: flex; gap: 10px; }
+  .cascade-row .form-select { flex: 1; }
+
+  .radio-group { display: flex; gap: 24px; }
+  .radio-item {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; font-size: 14px; color: var(--text-secondary);
+    -webkit-tap-highlight-color: transparent; font-weight: 500;
+    transition: transform 0.15s;
+    user-select: none; position: relative;
+  }
+  .radio-item:active { transform: scale(0.93); }
+  .radio-circle {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .radio-item.selected .radio-circle { border-color: var(--green-500); }
+  .radio-circle::after {
+    content: ''; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--green-500); transform: scale(0); transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .radio-item.selected .radio-circle::after { transform: scale(1); }
+
+  .upload-area {
+    width: 100%; min-height: 90px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; background: #FAFBFA; transition: all 0.2s;
+    padding: 16px; color: var(--text-muted); font-size: 13px; gap: 4px;
+    -webkit-tap-highlight-color: transparent;
+    position: relative; overflow: hidden;
+  }
+  .upload-area:active { border-color: var(--green-400); background: #eef9f2; transform: scale(0.98); }
+  .upload-area .upload-icon svg { width: 32px; height: 32px; opacity: 0.4; transition: opacity 0.2s; }
+  .upload-area:active .upload-icon svg { opacity: 0.7; }
+  .upload-area.has-file {
+    border-style: solid; border-color: var(--green-400);
+    background: var(--green-50); color: var(--green-600); font-weight: 500;
+  }
+  .upload-area.has-file .upload-icon svg { opacity: 0.8; }
+
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: var(--radius-md);
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.5px; -webkit-tap-highlight-color: transparent;
+    position: relative; overflow: hidden; user-select: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    color: white; box-shadow: 0 4px 14px rgba(61,173,104,0.25);
+  }
+  .btn-primary:active { transform: scale(0.96); box-shadow: 0 1px 4px rgba(61,173,104,0.2); background: linear-gradient(135deg, var(--green-600), var(--green-700)); }
+  .btn-disabled { background: #E8ECEA; color: #ABB5AE; cursor: not-allowed; pointer-events: none; }
+  .btn-outline-green {
+    background: #E8ECEA; color: #8B958E;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* Video player */
+  .video-player-wrapper {
+    position: relative; width: 100%; border-radius: var(--radius-md);
+    overflow: hidden; background: #000; margin: 12px 0;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .video-player-wrapper video { width: 100%; display: block; }
+  .video-controls {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 30px 12px 10px; display: flex; align-items: center;
+    gap: 8px; transition: opacity 0.3s;
+  }
+  .video-play-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: white; flex-shrink: 0; padding: 0;
+  }
+  .video-play-btn svg { width: 16px; height: 16px; }
+  .video-time { color: white; font-size: 11px; flex-shrink: 0; min-width: 36px; text-align: center; }
+  .video-progress {
+    flex: 1; height: 4px; -webkit-appearance: none; appearance: none;
+    background: rgba(255,255,255,0.3); border-radius: 2px; outline: none;
+    cursor: pointer;
+  }
+  .video-progress::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: white; border: 2px solid var(--green-500);
+  }
+  .video-speed-btn {
+    color: white; font-size: 11px; background: rgba(255,255,255,0.2);
+    border: none; border-radius: 4px; padding: 3px 8px; cursor: pointer;
+  }
+  .video-fullscreen-btn {
+    width: 28px; height: 28px; background: none; border: none;
+    cursor: pointer; color: white; display: flex; align-items: center; justify-content: center;
+  }
+  .video-fullscreen-btn svg { width: 16px; height: 16px; }
+  .video-overlay-play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,0.25); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.3s; pointer-events: none;
+  }
+  .video-overlay-play svg { width: 28px; height: 28px; color: white; }
+
+  .section-title {
+    font-size: 14px; font-weight: 700; color: var(--text-secondary);
+    margin: 18px 0 10px; padding-left: 12px;
+    border-left: 3px solid var(--green-400); line-height: 1;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    background: rgba(27,46,35,0.9); color: white;
+    padding: 14px 28px; border-radius: 26px; font-size: 14px;
+    z-index: 1000; opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none; white-space: nowrap; font-weight: 500;
+    backdrop-filter: blur(10px);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .toast.error { background: rgba(200,40,40,0.92); }
+
+  /* Detail page */
+  .detail-cover {
+    width: 100%; height: 180px; border-radius: var(--radius-lg);
+    overflow: hidden; margin-bottom: 14px; position: relative;
+  }
+  .detail-cover svg { width: 100%; height: 100%; }
+  .detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .detail-tag {
+    padding: 5px 12px; border-radius: 16px;
+    background: var(--green-50); color: var(--green-600);
+    font-size: 12px; font-weight: 500;
+  }
+  .detail-text { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin: 10px 0; }
+  .preview-box {
+    background: var(--green-50); border-radius: var(--radius-md);
+    padding: 18px; margin: 12px 0; text-align: center;
+    color: var(--green-600); font-size: 14px; font-weight: 500;
+    border: 1px solid var(--green-100);
+    cursor: pointer; transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden; user-select: none;
+  }
+  .preview-box:active { transform: scale(0.97); background: #daf2e4; border-color: var(--green-300); }
+
+  .empty-state {
+    text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 14px;
+  }
+  .empty-state .empty-icon { margin-bottom: 12px; opacity: 0.35; }
+  .empty-state .empty-icon svg { width: 56px; height: 56px; }
+
+  /* Reference image placeholder */
+  .ref-img {
+    width: 80px; height: 100px; background: #FFFEF9; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; border: 1px solid #E0DDD0; position: relative; overflow: hidden;
+  }
+  .ref-img::after {
+    content: '示例图片'; position: absolute; top: 4px; left: 50%;
+    transform: translateX(-50%); font-size: 9px; color: #B5A98A;
+    background: rgba(255,254,249,0.85); padding: 1px 6px;
+    border-radius: 3px; white-space: nowrap; pointer-events: none;
+  }
+
+  /* 多图上传网格 */
+  .multi-upload-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .upload-thumb {
+    aspect-ratio: 1; border-radius: 10px; border: 1.5px dashed #DDE2DE;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s;
+    background: #FAFBFA; position: relative; overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .upload-thumb:active { transform: scale(0.95); background: #F4F7F5; }
+  .upload-thumb-add {
+    font-size: 28px; color: var(--text-muted); text-align: center;
+    line-height: 1.2; font-weight: 300;
+  }
+  .upload-thumb.has-image {
+    border-style: solid; border-color: var(--border);
+    background: #fff;
+  }
+  .upload-thumb.has-image::after {
+    content: '×'; position: absolute; top: 4px; right: 6px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(0,0,0,0.55); color: #fff;
+    font-size: 12px; font-weight: 700; line-height: 18px;
+    text-align: center;
+  }
+  .upload-thumb-image {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  /* Button loading state */
+  .btn-loading {
+    pointer-events: none; opacity: 0.75;
+  }
+  .btn-loading::after {
+    content: '';
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-left: 8px; vertical-align: -3px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Success flash on card */
+  .flash-success {
+    animation: flashGreen 0.6s ease;
+  }
+  @keyframes flashGreen {
+    0% { box-shadow: 0 0 0 0 rgba(61,173,104,0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(61,173,104,0); }
+    100% { box-shadow: 0 0 0 0 rgba(61,173,104,0); }
+  }
+
+  /* Tab item bounce on tap */
+  .tab-bounce { animation: tabBounce 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes tabBounce {
+    0% { transform: scale(0.9); }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  /* Shake for invalid inputs */
+  .shake { animation: shake 0.4s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  /* Pulse dot for interactive hint */
+  .pulse-dot {
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%,100% { box-shadow: 0 0 0 0 rgba(61,173,104,0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(61,173,104,0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>5G &nbsp;▮▮▮▮ &nbsp;🔋</span>
+  </div>
+
+  <!-- Header -->
+  <div class="app-header" id="appHeader">湖南出版中心</div>
+
+  <!-- Content Area -->
+  <div class="content-area" id="contentArea">
+
+    <!-- ==================== 课程报名 ==================== -->
+    <div class="page active" id="page-signup">
+      <div class="page-header">
+        <h2>培训报名</h2>
+        <p>选择感兴趣的培训活动，在线提交报名</p>
+      </div>
+
+      <div class="card activity-card" onclick="openSignupDetail('2024年湖南省中小学骨干教师培训', '2025-07-15 ~ 2025-07-20', '长沙教育学院', 'active')">
+        <div class="cover">
+          <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#D0F0DC"/>
+                <stop offset="50%" style="stop-color:#B8E6CC"/>
+                <stop offset="100%" style="stop-color:#8DD8A8"/>
+              </linearGradient>
+            </defs>
+            <rect width="340" height="150" fill="url(#g1)"/>
+            <circle cx="280" cy="20" r="60" fill="white" opacity="0.15"/>
+            <circle cx="300" cy="80" r="40" fill="white" opacity="0.1"/>
+            <circle cx="30" cy="110" r="50" fill="white" opacity="0.12"/>
+            <rect x="140" y="30" width="4" height="90" rx="2" fill="white" opacity="0.4"/>
+            <rect x="152" y="40" width="4" height="70" rx="2" fill="white" opacity="0.3"/>
+            <rect x="164" y="50" width="4" height="50" rx="2" fill="white" opacity="0.2"/>
+            <rect x="60" y="50" width="60" height="6" rx="3" fill="white" opacity="0.4"/>
+            <rect x="60" y="65" width="50" height="6" rx="3" fill="white" opacity="0.3"/>
+            <rect x="60" y="80" width="55" height="6" rx="3" fill="white" opacity="0.2"/>
+          </svg>
+        </div>
+        <span class="tag active">进行中</span>
+        <h3>2024年湖南省中小学骨干教师培训</h3>
+        <div class="meta">
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            2025-07-15 ~ 2025-07-20</span>
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            长沙教育学院</span>
+        </div>
+      </div>
+
+      <div class="card activity-card" onclick="openSignupDetail('新课程标准解读与实践研讨会', '2025-07-25 ~ 2025-07-27', '湖南师范大学', 'active')">
+        <div class="cover">
+          <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#D8F0E0"/>
+                <stop offset="50%" style="stop-color:#C0E8D0"/>
+                <stop offset="100%" style="stop-color:#A0DCB8"/>
+              </linearGradient>
+            </defs>
+            <rect width="340" height="150" fill="url(#g2)"/>
+            <circle cx="60" cy="30" r="70" fill="white" opacity="0.12"/>
+            <circle cx="270" cy="120" r="80" fill="white" opacity="0.1"/>
+            <path d="M130 40 L240 40 L185 120 Z" fill="white" opacity="0.15"/>
+            <rect x="30" y="50" width="50" height="7" rx="3.5" fill="white" opacity="0.35"/>
+            <rect x="30" y="65" width="42" height="7" rx="3.5" fill="white" opacity="0.25"/>
+            <rect x="30" y="80" width="46" height="7" rx="3.5" fill="white" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="tag active">进行中</span>
+        <h3>新课程标准解读与实践研讨会</h3>
+        <div class="meta">
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            2025-07-25 ~ 2025-07-27</span>
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            湖南师范大学</span>
+        </div>
+      </div>
+
+      <div class="card activity-card ended-card" onclick="showToast('该活动已结束，仅可查看详情')">
+        <div class="cover">
+          <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#E8E8E8"/>
+                <stop offset="100%" style="stop-color:#D5D5D5"/>
+              </linearGradient>
+            </defs>
+            <rect width="340" height="150" fill="url(#g3)"/>
+            <rect x="80" y="35" width="180" height="80" rx="10" fill="white" opacity="0.4"/>
+            <rect x="110" y="50" width="50" height="7" rx="3.5" fill="white" opacity="0.5"/>
+            <rect x="110" y="65" width="40" height="7" rx="3.5" fill="white" opacity="0.35"/>
+            <rect x="110" y="80" width="45" height="7" rx="3.5" fill="white" opacity="0.22"/>
+          </svg>
+        </div>
+        <span class="tag ended">已结束</span>
+        <h3>2024年秋季教材使用培训会</h3>
+        <div class="meta">
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            2024-09-10 ~ 2024-09-12</span>
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            湖南省教育科学研究院</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 报名详情 -->
+    <div class="page sub-page" id="page-signup-detail" style="display:none;">
+      <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:2px;font-weight:700;" id="signupDetailTitle"></h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;" id="signupDetailMeta"></p>
+      <div class="detail-cover" id="signupDetailCover">
+        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gd1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#D0F0DC"/>
+              <stop offset="100%" style="stop-color:#8DD8A8"/>
+            </linearGradient>
+          </defs>
+          <rect width="340" height="180" fill="url(#gd1)"/>
+          <circle cx="290" cy="30" r="55" fill="white" opacity="0.12"/>
+          <circle cx="50" cy="150" r="40" fill="white" opacity="0.1"/>
+          <rect x="100" y="40" width="6" height="100" rx="3" fill="white" opacity="0.35"/>
+          <rect x="116" y="55" width="6" height="70" rx="3" fill="white" opacity="0.25"/>
+          <rect x="132" y="70" width="6" height="40" rx="3" fill="white" opacity="0.18"/>
+        </svg>
+      </div>
+      <div class="form-group"><label class="form-label">姓名<span class="required">*</span></label><input class="form-input" type="text" placeholder="请输入您的姓名"></div>
+      <div class="form-group">
+        <label class="form-label">性别<span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item selected" onclick="selectRadio(this)"><span class="radio-circle"></span>男</label>
+          <label class="radio-item" onclick="selectRadio(this)"><span class="radio-circle"></span>女</label>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">工作单位<span class="required">*</span></label><input class="form-input" type="text" placeholder="请输入您的工作单位"></div>
+      <div class="form-group"><label class="form-label">职称<span class="required">*</span></label>
+        <select class="form-select">
+          <option value="" disabled selected>请选择您的职称</option>
+          <optgroup label="正高级">
+            <option>正高级教师</option>
+            <option>特级教师</option>
+          </optgroup>
+          <optgroup label="高级">
+            <option>高级教师</option>
+            <option>中学高级教师</option>
+            <option>小学高级教师</option>
+          </optgroup>
+          <optgroup label="一级">
+            <option>一级教师</option>
+            <option>中学一级教师</option>
+            <option>小学一级教师</option>
+          </optgroup>
+          <optgroup label="二级">
+            <option>二级教师</option>
+            <option>中学二级教师</option>
+            <option>小学二级教师</option>
+          </optgroup>
+          <optgroup label="三级">
+            <option>三级教师</option>
+            <option>小学三级教师</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">学段学科<span class="required">*</span></label>
+        <div class="cascade-row">
+          <select class="form-select" id="cascadeStage" onchange="updateCascadeSubjects()">
+            <option value="" disabled selected>请选择学段</option>
+            <option value="primary">小学</option>
+            <option value="junior">初中</option>
+            <option value="senior">高中</option>
+          </select>
+          <select class="form-select" id="cascadeSubject" disabled>
+            <option value="" disabled selected>请选择学科</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">联系方式<span class="required">*</span></label><input class="form-input" type="tel" placeholder="请输入手机号码"></div>
+      <button class="btn btn-primary" style="margin-top:6px;" onclick="handleSubmit('报名')">提交报名</button>
+    </div>
+
+    <!-- ==================== 发展历程 ==================== -->
+    <div class="page" id="page-timeline" style="padding:0;">
+      <div class="timeline-hero">
+        <!-- Decorative cloud motifs -->
+        <svg class="hero-cloud-l" viewBox="0 0 56 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 24c-2-4 0-10 4-12 1-5 7-8 12-6 3-2 8-2 12 1 4-1 9 1 11 5 5 0 8 4 8 8 0 3-2 6-5 7H14c-6 0-10-1-10-3z" fill="#B5EEC8" opacity="0.5"/>
+          <path d="M10 16c-2-3 0-8 3-9 2-4 6-6 10-5 3-2 7-1 10 2 3-1 7 1 8 4 4 0 6 3 6 6 0 2-2 5-4 5H16c-3-1-6-2-6-3z" fill="#84D4A4" opacity="0.3"/>
+        </svg>
+        <svg class="hero-cloud-r" viewBox="0 0 52 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M44 20c3-3 2-9-1-11-1-5-6-8-11-5-3-3-8-2-11 2-4-2-9 0-10 4-4 1-6 5-4 8 1 2 4 3 6 2h24c5 0 8 0 7 0z" fill="#B5EEC8" opacity="0.4"/>
+        </svg>
+        <!-- Scattered dot decorations -->
+        <svg class="hero-dots" viewBox="0 0 390 240" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <circle cx="32" cy="58" r="1.5" fill="#84D4A4"/>
+          <circle cx="358" cy="42" r="1" fill="#84D4A4"/>
+          <circle cx="68" cy="28" r="1" fill="#6CC686"/>
+          <circle cx="320" cy="68" r="1.5" fill="#6CC686"/>
+          <circle cx="195" cy="24" r="1" fill="#84D4A4"/>
+          <circle cx="48" cy="108" r="1" fill="#6CC686"/>
+          <circle cx="342" cy="98" r="1.2" fill="#84D4A4"/>
+          <circle cx="170" cy="180" r="1.5" fill="#6CC686"/>
+          <circle cx="220" cy="185" r="1" fill="#84D4A4"/>
+          <circle cx="90" cy="155" r="1" fill="#5BAF74"/>
+          <circle cx="300" cy="140" r="1.2" fill="#5BAF74"/>
+          <circle cx="260" cy="32" r="0.8" fill="#84D4A4"/>
+          <circle cx="130" cy="36" r="0.8" fill="#6CC686"/>
+        </svg>
+        <div class="timeline-hero-body">
+          <div class="tl-ornament-top">
+            <span class="orn-line"></span><span class="orn-diamond"></span><span class="orn-line"></span>
+          </div>
+          <div class="tl-seal">
+            <div class="tl-seal-outer"></div>
+            <div class="tl-seal-middle"></div>
+            <div class="tl-seal-inner"><span>出版</span></div>
+            <span class="seal-accent tl"></span>
+            <span class="seal-accent tr"></span>
+            <span class="seal-accent bl"></span>
+            <span class="seal-accent br"></span>
+          </div>
+          <h2>发展时间轴</h2>
+          <div class="tl-ornament-bot">
+            <span class="orn-line"></span>
+            <span class="orn-bracket">◆</span>
+            <span class="orn-line"></span>
+          </div>
+          <p class="hero-sub">DEVELOPMENT TIMELINE</p>
+        </div>
+      </div>
+      <div class="timeline-body-wrap">
+        <div class="timeline-modern" id="timelineContainer"></div>
+      </div>
+    </div>
+
+    <!-- ==================== 课程资料 ==================== -->
+    <div class="page" id="page-course">
+      <div class="page-header">
+        <h2>课程资料</h2>
+        <p>多级筛选，精准查找培训课程</p>
+      </div>
+
+      <div class="filter-label">学段</div>
+      <div class="filter-row" id="filterStage"></div>
+      <div class="filter-label">学科</div>
+      <div class="filter-row" id="filterSubject"></div>
+      <div class="filter-label">培训方向</div>
+      <div class="filter-row" id="filterDir" style="margin-bottom:12px;"></div>
+
+      <div id="courseList">
+        <div class="card course-card" data-stage="小学" data-subject="语文" data-direction="新课标培训" onclick="openCourseDetail('小学语文新课标解读', '小学 / 语文 / 新课标培训', '张明华', 'video')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#DCEFE4"/><stop offset="100%" style="stop-color:#B8E0C8"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc1)"/>
+              <circle cx="290" cy="20" r="45" fill="white" opacity="0.12"/>
+              <circle cx="50" cy="90" r="35" fill="white" opacity="0.1"/>
+              <polygon points="155,30 175,60 135,60" fill="white" opacity="0.5"/>
+              <rect x="150" y="68" width="16" height="30" rx="3" fill="white" opacity="0.35"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
+          <h4>小学语文新课标解读</h4>
+        </div>
+        <div class="card course-card" data-stage="初中" data-subject="数学" data-direction="教学方法" onclick="openCourseDetail('初中数学核心素养培养策略', '初中 / 数学 / 教学方法', '李芳华', 'pdf')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8F0E4"/><stop offset="100%" style="stop-color:#D0E4D0"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc2)"/>
+              <rect x="80" y="25" width="180" height="70" rx="6" fill="white" opacity="0.25"/>
+              <rect x="100" y="40" width="60" height="5" rx="2.5" fill="white" opacity="0.4"/>
+              <rect x="100" y="52" width="40" height="5" rx="2.5" fill="white" opacity="0.3"/>
+              <rect x="100" y="64" width="50" height="5" rx="2.5" fill="white" opacity="0.2"/>
+              <rect x="100" y="76" width="35" height="5" rx="2.5" fill="white" opacity="0.15"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:#E67E22;background:#FFF3E0;">PDF文档</span>
+          <h4>初中数学核心素养培养策略</h4>
+        </div>
+        <div class="card course-card" data-stage="高中" data-subject="英语" data-direction="教学方法" onclick="openCourseDetail('高中英语阅读教学设计', '高中 / 英语 / 教学方法', '王海燕', 'ppt')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E0ECF0"/><stop offset="100%" style="stop-color:#C8DCE8"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc3)"/>
+              <rect x="30" y="15" width="130" height="90" rx="8" fill="white" opacity="0.35"/>
+              <rect x="180" y="25" width="130" height="40" rx="6" fill="white" opacity="0.22"/>
+              <rect x="180" y="75" width="55" height="8" rx="4" fill="white" opacity="0.28"/>
+              <rect x="245" y="75" width="65" height="8" rx="4" fill="white" opacity="0.28"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:#2980B9;background:#E3F2FD;">PPT课件</span>
+          <h4>高中英语阅读教学设计</h4>
+        </div>
+        <div class="card course-card" data-stage="初中" data-subject="语文" data-direction="教材解析" onclick="openCourseDetail('初中语文教材深度解析', '初中 / 语文 / 教材解析', '陈卫国', 'video')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D8ECE0"/><stop offset="100%" style="stop-color:#C0E0CC"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc4)"/>
+              <circle cx="290" cy="20" r="45" fill="white" opacity="0.12"/>
+              <circle cx="40" cy="95" r="30" fill="white" opacity="0.1"/>
+              <rect x="130" y="25" width="80" height="70" rx="8" fill="white" opacity="0.25"/>
+              <rect x="145" y="40" width="25" height="6" rx="3" fill="white" opacity="0.35"/>
+              <rect x="145" y="54" width="35" height="6" rx="3" fill="white" opacity="0.25"/>
+              <rect x="145" y="68" width="20" height="6" rx="3" fill="white" opacity="0.18"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
+          <h4>初中语文教材深度解析</h4>
+        </div>
+        <div class="card course-card" data-stage="小学" data-subject="数学" data-direction="教学方法" onclick="openCourseDetail('小学数学思维训练方法', '小学 / 数学 / 教学方法', '刘建国', 'ppt')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8F0E4"/><stop offset="100%" style="stop-color:#D0E4D0"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc5)"/>
+              <circle cx="60" cy="60" r="40" fill="white" opacity="0.15"/>
+              <circle cx="280" cy="30" r="25" fill="white" opacity="0.12"/>
+              <rect x="120" y="25" width="100" height="70" rx="8" fill="white" opacity="0.22"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:#2980B9;background:#E3F2FD;">PPT课件</span>
+          <h4>小学数学思维训练方法</h4>
+        </div>
+        <div class="card course-card" data-stage="高中" data-subject="数学" data-direction="新课标培训" onclick="openCourseDetail('高中数学新课标变化解析', '高中 / 数学 / 新课标培训', '周文博', 'video')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D8E8F0"/><stop offset="100%" style="stop-color:#C0D8E8"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc6)"/>
+              <polygon points="155,30 175,60 135,60" fill="white" opacity="0.45"/>
+              <rect x="150" y="68" width="16" height="30" rx="3" fill="white" opacity="0.3"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
+          <h4>高中数学新课标变化解析</h4>
+        </div>
+        <div class="card course-card" data-stage="初中" data-subject="英语" data-direction="考试评价" onclick="openCourseDetail('初中英语学业质量评价体系', '初中 / 英语 / 考试评价', '赵晓燕', 'pdf')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F0ECF0"/><stop offset="100%" style="stop-color:#E4D8E4"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc7)"/>
+              <rect x="80" y="25" width="180" height="70" rx="6" fill="white" opacity="0.25"/>
+              <rect x="100" y="40" width="80" height="5" rx="2.5" fill="white" opacity="0.4"/>
+              <rect x="100" y="52" width="60" height="5" rx="2.5" fill="white" opacity="0.3"/>
+              <rect x="100" y="64" width="70" height="5" rx="2.5" fill="white" opacity="0.2"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:#E67E22;background:#FFF3E0;">PDF文档</span>
+          <h4>初中英语学业质量评价体系</h4>
+        </div>
+        <div class="card course-card" data-stage="小学" data-subject="英语" data-direction="新课标培训" onclick="openCourseDetail('小学英语新课标教学建议', '小学 / 英语 / 新课标培训', '马丽萍', 'video-ext')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8F0E8"/><stop offset="100%" style="stop-color:#D0E4D4"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc8)"/>
+              <circle cx="290" cy="20" r="45" fill="white" opacity="0.1"/>
+              <rect x="130" y="25" width="80" height="70" rx="8" fill="white" opacity="0.22"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
+          <h4>小学英语新课标教学建议</h4>
+        </div>
+        <div class="card course-card" data-stage="高中" data-subject="语文" data-direction="教材解析" onclick="openCourseDetail('高中语文统编教材使用指导', '高中 / 语文 / 教材解析', '孙建军', 'ppt')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#DCEFE4"/><stop offset="100%" style="stop-color:#C0E0CC"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc9)"/>
+              <rect x="30" y="15" width="130" height="90" rx="8" fill="white" opacity="0.3"/>
+              <rect x="180" y="25" width="130" height="35" rx="6" fill="white" opacity="0.2"/>
+              <rect x="180" y="70" width="55" height="7" rx="3.5" fill="white" opacity="0.25"/>
+              <rect x="245" y="70" width="65" height="7" rx="3.5" fill="white" opacity="0.25"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:#2980B9;background:#E3F2FD;">PPT课件</span>
+          <h4>高中语文统编教材使用指导</h4>
+        </div>
+        <div class="card course-card" data-stage="小学" data-subject="语文" data-direction="课程开发" onclick="openCourseDetail('小学语文校本课程开发实践', '小学 / 语文 / 课程开发', '黄晓琳', 'pdf')">
+          <div class="cover">
+            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F0F0E8"/><stop offset="100%" style="stop-color:#E8E8D0"/></linearGradient></defs>
+              <rect width="340" height="120" fill="url(#gc10)"/>
+              <circle cx="40" cy="95" r="35" fill="white" opacity="0.12"/>
+              <polygon points="155,30 175,60 135,60" fill="white" opacity="0.35"/>
+            </svg>
+          </div>
+          <span class="course-type-badge" style="color:#E67E22;background:#FFF3E0;">PDF文档</span>
+          <h4>小学语文校本课程开发实践</h4>
+        </div>
+
+      </div>
+      <div class="empty-state" id="courseEmpty" style="display:none;">
+        <div class="empty-icon">
+          <svg viewBox="0 0 56 56" fill="none"><rect x="8" y="12" width="40" height="32" rx="4" stroke="currentColor" stroke-width="2"/><line x1="16" y1="24" x2="40" y2="24" stroke="currentColor" stroke-width="2"/><line x1="16" y1="32" x2="34" y2="32" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <p>暂无相关课程</p>
+      </div>
+    </div>
+
+    <!-- 课程详情 -->
+    <div class="page sub-page" id="page-course-detail" style="display:none;">
+      <div class="detail-cover" id="courseDetailCover">
+        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="gcd" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D0F0DC"/><stop offset="100%" style="stop-color:#8DD8A8"/></linearGradient></defs>
+          <rect width="340" height="180" fill="url(#gcd)"/>
+          <circle cx="270" cy="40" r="60" fill="white" opacity="0.1"/>
+          <circle cx="60" cy="140" r="40" fill="white" opacity="0.1"/>
+          <polygon points="158,50 190,95 126,95" fill="white" opacity="0.45"/>
+          <circle cx="126" cy="95" r="22" fill="white" opacity="0.2"/>
+          <circle cx="190" cy="95" r="22" fill="white" opacity="0.2"/>
+        </svg>
+      </div>
+      <h3 style="font-size:18px;color:var(--text-primary);margin:10px 0 2px;font-weight:700;" id="courseDetailTitle"></h3>
+      <div class="detail-meta" id="courseDetailTags"></div>
+      <p style="font-size:13px;color:var(--text-muted);" id="courseDetailSpeaker"></p>
+      <div class="detail-text">本课程围绕学科核心素养理念，结合具体教学案例，深入讲解课堂教学设计的优化策略，帮助教师提升教学效果。</div>
+      <!-- Video Player -->
+      <div class="video-player-wrapper" id="videoPlayerWrapper" style="display:none;" onclick="toggleVideoPlay()">
+        <video id="courseVideo" src="" playsinline></video>
+        <button class="video-overlay-play" id="videoOverlayPlay">
+          <svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
+        </button>
+        <div class="video-controls" id="videoControls">
+          <button class="video-play-btn" id="videoPlayBtn" onclick="toggleVideoPlay()">
+            <svg id="videoPlayIcon" viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
+          </button>
+          <span class="video-time" id="videoCurTime">0:00</span>
+          <input type="range" class="video-progress" id="videoProgress" min="0" max="100" value="0" oninput="seekVideo(this.value)">
+          <span class="video-time" id="videoDurTime">0:00</span>
+          <button class="video-speed-btn" id="videoSpeedBtn" onclick="cycleVideoSpeed()">1x</button>
+          <button class="video-fullscreen-btn" onclick="toggleFullscreen()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="15,3 21,3 21,9"/><polyline points="9,21 3,21 3,15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="preview-box" id="coursePreviewArea"></div>
+      <button class="btn btn-primary" id="courseDownloadBtn" onclick="handleDownload()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-4px;margin-right:4px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下载课程资料
+      </button>
+      <button class="btn btn-outline-green" id="coursePreviewBtn" style="display:none;">
+        仅在线预览
+      </button>
+    </div>
+
+    <!-- ==================== 常用功能 ==================== -->
+    <div class="page" id="page-functions">
+      <div class="page-header">
+        <h2>常用功能</h2>
+        <p>便捷工具与服务入口</p>
+      </div>
+      <div class="func-grid">
+        <div class="func-card" onclick="openFunction('eval')">
+          <div class="func-icon eval">
+            <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="3" width="22" height="24" rx="3" stroke="#3DAD68" stroke-width="2" stroke-linecap="round"/>
+              <line x1="9" y1="10" x2="21" y2="10" stroke="#3DAD68" stroke-width="2" stroke-linecap="round"/>
+              <line x1="9" y1="15" x2="21" y2="15" stroke="#3DAD68" stroke-width="2" stroke-linecap="round"/>
+              <line x1="9" y1="20" x2="15" y2="20" stroke="#3DAD68" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="22" cy="22" r="5" fill="#3DAD68"/>
+              <path d="M20 22l1.5 1.5 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="func-info">
+            <h3>效果评估</h3>
+            <p>对培训活动进行标准化评估反馈</p>
+          </div>
+          <span class="func-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+          </span>
+        </div>
+        <div class="func-card" onclick="openFunction('swap')">
+          <div class="func-icon swap">
+            <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="8" width="22" height="18" rx="3" stroke="#E67E22" stroke-width="2" stroke-linecap="round"/>
+              <path d="M14 8V4a1 1 0 011-1h2.5L15 6" stroke="#E67E22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="19" cy="17" r="3" fill="#E67E22"/>
+              <path d="M17 17l1.5 1.5 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 14l3 3-3 3" stroke="#E67E22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="func-info">
+            <h3>教材调换</h3>
+            <p>提交教材质量问题换货申请</p>
+          </div>
+          <span class="func-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+          </span>
+        </div>
+        <div class="func-card" onclick="openFunction('feedback')">
+          <div class="func-icon feedback">
+            <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 22V8a3 3 0 013-3h14a3 3 0 013 3v7a3 3 0 01-3 3h-6l-6 4v-4H9a3 3 0 01-3-3z" stroke="#3B82F6" stroke-width="2" stroke-linejoin="round"/>
+              <circle cx="11" cy="13" r="1.5" fill="#3B82F6"/>
+              <circle cx="16" cy="13" r="1.5" fill="#3B82F6"/>
+              <circle cx="21" cy="13" r="1.5" fill="#3B82F6"/>
+            </svg>
+          </div>
+          <div class="func-info">
+            <h3>意见反馈</h3>
+            <p>反馈印装质量、内容质量等问题</p>
+          </div>
+          <span class="func-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 效果评估 -->
+    <div class="page sub-page" id="page-eval" style="display:none;">
+      <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:14px;font-weight:700;">效果评估</h3>
+      <!-- 活动选择 -->
+      <div class="form-group">
+        <label class="form-label">选择活动<span class="required">*</span></label>
+        <div id="activitySelectBox" onclick="showActivityPicker()" style="width:100%;padding:12px 36px 12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text-primary);background:var(--card-bg);cursor:pointer;transition:all 0.2s;position:relative;">
+          <span id="selectedActivityText" style="color:var(--text-muted);">请选择活动</span>
+          <svg width="12" height="7" viewBox="0 0 12 7" fill="none" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);"><path d="M1 1l5 5 5-5" stroke="#98ABA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px;">以下请您对本次培训专家的工作给予评价。</p>
+      <!-- 一、教学态度 -->
+      <div class="form-section">
+        <div class="section-title">一、教学态度</div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>1.课前准备充分，态度认真敬业</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q1" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q1" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q1" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q1" value="D">D差</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>2.严格遵照培训计划的要求(含作息时间)</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q2" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q2" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q2" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q2" value="D">D差</label>
+          </div>
+        </div>
+      </div>
+      <!-- 二、教学能力 -->
+      <div class="form-section">
+        <div class="section-title">二、教学能力</div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>3.内容充实，思路清晰，分析深刻，重点突出</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q3" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q3" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q3" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q3" value="D">D差</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>4.结合实际，方法得当，富有激情，注重交流互动</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q4" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q4" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q4" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q4" value="D">D差</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>5.理论联系实际，善于启发学员思维</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q5" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q5" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q5" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q5" value="D">D差</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>6.语言规范，清晰准确，精练流畅，表述生动</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q6" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q6" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q6" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q6" value="D">D差</label>
+          </div>
+        </div>
+      </div>
+      <!-- 三、培训效果 -->
+      <div class="form-section">
+        <div class="section-title">三、培训效果</div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>7.您(学员)的收获大小</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q7" value="A">A优</label>
+            <label class="radio-inline"><input type="radio" name="q7" value="B">B良</label>
+            <label class="radio-inline"><input type="radio" name="q7" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q7" value="D">D差</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>8.您对本次培训的总体评价是</div>
+          <div class="radio-group">
+            <label class="radio-inline"><input type="radio" name="q8" value="A">A非常满意</label>
+            <label class="radio-inline"><input type="radio" name="q8" value="B">B满意</label>
+            <label class="radio-inline"><input type="radio" name="q8" value="C">C中</label>
+            <label class="radio-inline"><input type="radio" name="q8" value="D">D差</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>9.您对本次培训服务工作最满意的是(按照优先顺序)</div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="q9" value="A">A培训环境及硬件设施</label>
+            <label class="checkbox-item"><input type="checkbox" name="q9" value="B">B培训内容</label>
+            <label class="checkbox-item"><input type="checkbox" name="q9" value="C">C培训组织管理</label>
+            <label class="checkbox-item"><input type="checkbox" name="q9" value="D">D培训资料</label>
+            <label class="checkbox-item"><input type="checkbox" name="q9" value="E">E培训反馈</label>
+            <label class="checkbox-item"><input type="checkbox" name="q9" value="F">F其他</label>
+          </div>
+        </div>
+      </div>
+      <!-- 四、培训需求 -->
+      <div class="form-section">
+        <div class="section-title">四、培训需求</div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>10.培训内容需求方面，您最需要(按照优先顺序)</div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="q10" value="A">A学科知识</label>
+            <label class="checkbox-item"><input type="checkbox" name="q10" value="B">B课改新理念或新方法</label>
+            <label class="checkbox-item"><input type="checkbox" name="q10" value="C">C学科教学知识</label>
+            <label class="checkbox-item"><input type="checkbox" name="q10" value="D">D其他</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>11.在"教育教学专业能力"方面，您认为目前较欠缺的是(按照优先顺序)</div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="A">A分析和整合教材的能力</label>
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="B">B课程资源开发能力</label>
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="C">C课堂教学的组织与实施能力</label>
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="D">D教育教学评价能力</label>
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="E">E教学科研和论文写作能力</label>
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="F">F多媒体教学应用能力</label>
+            <label class="checkbox-item"><input type="checkbox" name="q11" value="G">G其他</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>12.您认为最有效的培训方式是(按照优先顺序)</div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="A">A专家讲座</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="B">B与专家研讨互动、交流对话</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="C">C观摩名师的课堂教学</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="D">D案例评析</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="E">E同行介绍经验、共同研讨</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="F">F实地参观考察</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="G">G网络远程培训</label>
+            <label class="checkbox-item"><input type="checkbox" name="q12" value="H">H其他</label>
+          </div>
+        </div>
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>13.您对培训的基本诉求是(按照优先顺序)</div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="q13" value="A">A获得新知识</label>
+            <label class="checkbox-item"><input type="checkbox" name="q13" value="B">B更新理念</label>
+            <label class="checkbox-item"><input type="checkbox" name="q13" value="C">C掌握新方法</label>
+            <label class="checkbox-item"><input type="checkbox" name="q13" value="D">D其他</label>
+          </div>
+        </div>
+      </div>
+      <!-- 14题 -->
+      <div class="form-section">
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>14.在您所参加的各类培训中，让您印象最深、收获最大的是哪一次？</div>
+          <div style="display:flex;gap:10px;margin-bottom:12px;">
+            <div style="flex:1;">
+              <label style="font-size:12px;color:var(--text-muted);">培训时间</label>
+              <input class="form-input" type="text" placeholder="请输入时间" style="margin-top:4px;">
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:12px;color:var(--text-muted);">培训主题</label>
+              <input class="form-input" type="text" placeholder="请输入主题" style="margin-top:4px;">
+            </div>
+          </div>
+          <label style="font-size:13px;color:var(--text-secondary);display:block;margin-bottom:6px;">让您印象深刻、觉得收获最大的原因是</label>
+          <textarea class="form-textarea" placeholder="请填写原因..."></textarea>
+        </div>
+      </div>
+      <!-- 培训科目 -->
+      <div class="form-section">
+        <div class="eval-question">
+          <div class="question-text"><span class="required">*</span>您本次参与的培训科目是</div>
+          <div class="radio-group-vertical">
+            <label class="radio-item"><input type="radio" name="subject" value="语文">语文</label>
+            <label class="radio-item"><input type="radio" name="subject" value="数学">数学</label>
+            <label class="radio-item"><input type="radio" name="subject" value="英语">英语</label>
+            <label class="radio-item"><input type="radio" name="subject" value="物理">物理</label>
+            <label class="radio-item"><input type="radio" name="subject" value="化学">化学</label>
+            <label class="radio-item"><input type="radio" name="subject" value="生物">生物</label>
+            <label class="radio-item"><input type="radio" name="subject" value="地理">地理</label>
+            <label class="radio-item"><input type="radio" name="subject" value="历史">历史</label>
+            <label class="radio-item"><input type="radio" name="subject" value="思想政治/道德与法治">思想政治/道德与法治</label>
+            <label class="radio-item"><input type="radio" name="subject" value="音乐">音乐</label>
+            <label class="radio-item"><input type="radio" name="subject" value="美术">美术</label>
+            <label class="radio-item"><input type="radio" name="subject" value="体育">体育</label>
+            <label class="radio-item"><input type="radio" name="subject" value="其他">其他</label>
+          </div>
+        </div>
+      </div>
+      <!-- 联系方式 -->
+      <div class="form-group">
+        <label class="form-label">联系方式<span class="optional">(选填)</span></label>
+        <input class="form-input" type="tel" placeholder="请输入手机号码">
+      </div>
+      <button class="btn btn-primary" onclick="handleSubmit('评估')">提交评估</button>
+    </div>
+
+    <!-- 教材调换 -->
+    <div class="page sub-page" id="page-swap" style="display:none;">
+      <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:14px;font-weight:700;">教材调换申请</h3>
+      <div class="form-group">
+        <label class="form-label">教材封面照<span class="required">*</span></label>
+        <div style="display:flex;gap:10px;align-items:start;">
+          <div class="upload-area" onclick="simulateUpload(this)" style="flex:1;min-height:100px;">
+            <span class="upload-icon">
+              <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="11" cy="13" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 22l8-6 6 5 4-3 10 8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </span>
+            <span>点击上传</span>
+          </div>
+          <div class="ref-img"><svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/><line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text></svg></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">教材版权页照片<span class="required">*</span></label>
+        <div style="display:flex;gap:10px;align-items:start;">
+          <div class="upload-area" onclick="simulateUpload(this)" style="flex:1;min-height:100px;">
+            <span class="upload-icon">
+              <svg viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="11" cy="13" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 22l8-6 6 5 4-3 10 8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </span>
+            <span>点击上传</span>
+          </div>
+          <div class="ref-img"><svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/><line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text></svg></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">质量问题细节照片<span class="required">*</span></label>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div class="multi-upload-grid" id="defectPhotoGrid" style="flex:1;">
+            <div class="upload-thumb" onclick="simulateMultiUpload(this)">
+              <span class="upload-thumb-add">+<br><span style="font-size:11px;opacity:0.7;">添加照片</span></span>
+            </div>
+          </div>
+          <div class="ref-img"><svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/><line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text></svg></div>
+        </div>
+      </div>
+      <div class="section-title">收件信息</div>
+      <div class="form-group"><label class="form-label">姓名<span class="required">*</span></label><input class="form-input" type="text" placeholder="请输入收件人姓名"></div>
+      <div class="form-group"><label class="form-label">联系电话<span class="required">*</span></label><input class="form-input" type="tel" placeholder="请输入联系电话"></div>
+      <div class="form-group">
+        <label class="form-label">省市区<span class="required">*</span></label>
+        <div class="form-select" onclick="showAddressPicker()" id="addrTrigger" style="cursor:pointer;">
+          <span id="addrDisplay" style="color:var(--text-muted);">请选择省市区</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="float:right;color:var(--text-muted);margin-top:2px;"><polyline points="6,9 12,15 18,9"/></svg>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">详细地址<span class="required">*</span></label><input class="form-input" type="text" placeholder="请输入详细地址"></div>
+      <button class="btn btn-primary" onclick="handleSubmit('调换申请')">提交申请</button>
+    </div>
+
+    <!-- 意见反馈 -->
+    <div class="page sub-page" id="page-feedback" style="display:none;">
+      <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:14px;font-weight:700;">意见反馈</h3>
+      <div class="form-group">
+        <label class="form-label">问题类型<span class="required">*</span></label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <span class="filter-chip" style="font-size:14px;padding:8px 16px;" onclick="selectFeedbackType(this)">印装质量</span>
+          <span class="filter-chip" style="font-size:14px;padding:8px 16px;" onclick="selectFeedbackType(this)">内容质量</span>
+          <span class="filter-chip" style="font-size:14px;padding:8px 16px;" onclick="selectFeedbackType(this)">问题投诉</span>
+          <span class="filter-chip" style="font-size:14px;padding:8px 16px;" onclick="selectFeedbackType(this)">其他</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">反馈内容<span class="required">*</span></label>
+        <textarea class="form-textarea" placeholder="请详细描述您遇到的问题..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">佐证图片<span class="optional">(最多4张)</span></label>
+        <div class="multi-upload-grid" id="evidencePhotoGrid">
+          <div class="upload-thumb" onclick="simulateMultiUploadEvid(this)">
+            <span class="upload-thumb-add">+<br><span style="font-size:11px;opacity:0.7;">添加照片</span></span>
+          </div>
+        </div>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:6px;display:inline-block;">支持JPG、PNG格式，单张不超过5MB</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">联系方式<span class="optional">(选填)</span></label>
+        <input class="form-input" type="tel" placeholder="请输入手机号码（选填）">
+      </div>
+      <button class="btn btn-primary" onclick="handleSubmit('反馈')">提交反馈</button>
+    </div>
+  </div>
+
+  <!-- Bottom Tab Bar -->
+  <div class="tab-bar" id="tabBar">
+    <div class="tab-item active" data-tab="signup" onclick="switchTab('signup')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="17" x2="12" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tab-label">课程报名</div>
+    </div>
+    <div class="tab-item" data-tab="timeline" onclick="switchTab('timeline')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+          <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="tab-label">发展历程</div>
+    </div>
+    <div class="tab-item" data-tab="course" onclick="switchTab('course')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6h16v14H4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M4 6l8-3 8 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="9" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="9" y1="13" x2="15" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tab-label">课程资料</div>
+    </div>
+    <div class="tab-item" data-tab="functions" onclick="switchTab('functions')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tab-label">常用功能</div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+var BOOK_PAGE_SVG = '<svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg">'
+  + '<rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/>'
+  + '<line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
+  + '<text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text>'
+  + '</svg>';
+let currentTab = 'signup';
+let currentSubPage = null;
+const pageNames = {
+  signup: '湖南出版中心', timeline: '发展历程', course: '课程资料', functions: '常用功能',
+  'signup-detail': '培训报名', 'course-detail': '课程详情',
+  eval: '效果评估', swap: '教材调换', feedback: '意见反馈'
+};
+
+
+// Tab bounce animation
+document.getElementById('tabBar').addEventListener('click', function(e) {
+  const tab = e.target.closest('.tab-item');
+  if (!tab) return;
+  tab.classList.add('tab-bounce');
+  tab.addEventListener('animationend', function h() {
+    tab.classList.remove('tab-bounce');
+    tab.removeEventListener('animationend', h);
+  });
+});
+
+// ============ Tab Navigation ============
+function switchTab(tab) {
+  if (currentTab === tab && !currentSubPage) return;
+  currentTab = tab; closeSubPage();
+  document.getElementById('tabBar').style.display = 'flex';
+  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+  const targetTab = document.querySelector(`.tab-item[data-tab="${tab}"]`);
+  if (targetTab) targetTab.classList.add('active');
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const page = document.getElementById('page-' + tab);
+  if (page) { page.classList.add('active'); }
+  document.getElementById('appHeader').innerHTML = pageNames[tab];
+  document.getElementById('contentArea').scrollTop = 0;
+}
+
+function openSubPage(subId) {
+  currentSubPage = subId;
+  document.getElementById('appHeader').innerHTML = '<span class="back-btn" onclick="closeSubPage()">\u2039</span>' + (pageNames[subId] || '');
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const page = document.getElementById('page-' + subId);
+  if (page) { page.classList.add('active'); page.style.display = 'block'; }
+  document.getElementById('contentArea').scrollTop = 0;
+  document.getElementById('tabBar').style.display = 'none';
+  document.getElementById('contentArea').style.height = 'calc(844px - 44px - var(--header-height))';
+}
+
+function closeSubPage() {
+  if (!currentSubPage) return;
+  const subPage = document.getElementById('page-' + currentSubPage);
+  if (subPage) { subPage.classList.remove('active'); subPage.style.display = 'none'; }
+  currentSubPage = null;
+  document.getElementById('tabBar').style.display = 'flex';
+  document.getElementById('contentArea').style.height = ''; // 恢复默认高度
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const page = document.getElementById('page-' + currentTab);
+  if (page) page.classList.add('active');
+  document.getElementById('appHeader').innerHTML = pageNames[currentTab];
+  document.getElementById('contentArea').scrollTop = 0;
+  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+  const tabEl = document.querySelector(`.tab-item[data-tab="${currentTab}"]`);
+  if (tabEl) tabEl.classList.add('active');
+}
+
+// ============ Toast with icon ============
+function showToast(msg, icon) {
+  var toast = document.getElementById('toast');
+  var iconMap = { success: '\u2714 ', error: '\u2718 ', info: '\u2139 ', download: '\u2B07 ' };
+  toast.textContent = (iconMap[icon] || '') + msg;
+  toast.classList.add('show');
+  if (icon === 'error') toast.classList.add('error');
+  else toast.classList.remove('error');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(function() { toast.classList.remove('show'); toast.classList.remove('error'); }, 2400);
+}
+
+// ============ Cascade Select: 学段 → 学科 ============
+const cascadeSubjects = {
+  primary:   ['语文','数学','英语','科学','道德与法治','音乐','美术','体育','信息技术','综合实践'],
+  junior:    ['语文','数学','英语','物理','化学','生物','道德与法治','历史','地理','音乐','美术','体育','信息技术'],
+  senior:    ['语文','数学','英语','物理','化学','生物','思想政治','历史','地理','音乐','美术','体育','信息技术','通用技术']
+};
+function updateCascadeSubjects() {
+  const stage = document.getElementById('cascadeStage').value;
+  const subject = document.getElementById('cascadeSubject');
+  subject.disabled = !stage;
+  subject.innerHTML = '<option value="" disabled selected>请选择学科</option>';
+  if (!stage) return;
+  cascadeSubjects[stage].forEach(s => {
+    const opt = document.createElement('option');
+    opt.textContent = s;
+    subject.appendChild(opt);
+  });
+  // Reset subject value when stage changes
+  subject.selectedIndex = 0;
+}
+
+// ============ Address Cascade: 省 → 市 → 区 ============
+const addrData = {
+  '北京市': {
+    '北京市': ['东城区','西城区','朝阳区','丰台区','石景山区','海淀区','顺义区','通州区','大兴区','昌平区']
+  },
+  '上海市': {
+    '上海市': ['黄浦区','徐汇区','长宁区','静安区','普陀区','虹口区','杨浦区','浦东新区','闵行区','宝山区']
+  },
+  '广东省': {
+    '广州市': ['越秀区','海珠区','荔湾区','天河区','白云区','黄埔区','番禺区','花都区','南沙区','增城区'],
+    '深圳市': ['罗湖区','福田区','南山区','宝安区','龙岗区','盐田区','龙华区','坪山区','光明区'],
+    '珠海市': ['香洲区','斗门区','金湾区'],
+    '东莞市': ['莞城区','南城区','东城区','万江区'],
+    '佛山市': ['禅城区','南海区','顺德区','三水区','高明区']
+  },
+  '浙江省': {
+    '杭州市': ['上城区','拱墅区','西湖区','滨江区','萧山区','余杭区','临平区','钱塘区','富阳区','临安区'],
+    '宁波市': ['海曙区','江北区','北仑区','镇海区','鄞州区','奉化区'],
+    '温州市': ['鹿城区','龙湾区','瓯海区','洞头区']
+  },
+  '江苏省': {
+    '南京市': ['玄武区','秦淮区','建邺区','鼓楼区','浦口区','栖霞区','雨花台区','江宁区','六合区'],
+    '苏州市': ['姑苏区','虎丘区','吴中区','相城区','吴江区'],
+    '无锡市': ['梁溪区','锡山区','惠山区','滨湖区','新吴区']
+  },
+  '湖南省': {
+    '长沙市': ['芙蓉区','天心区','岳麓区','开福区','雨花区','望城区'],
+    '株洲市': ['荷塘区','芦淞区','石峰区','天元区','渌口区'],
+    '湘潭市': ['雨湖区','岳塘区'],
+    '衡阳市': ['珠晖区','雁峰区','石鼓区','蒸湘区','南岳区']
+  },
+  '湖北省': {
+    '武汉市': ['江岸区','江汉区','硚口区','汉阳区','武昌区','青山区','洪山区','东西湖区','汉南区','蔡甸区'],
+    '宜昌市': ['西陵区','伍家岗区','点军区','猇亭区','夷陵区'],
+    '襄阳市': ['襄城区','樊城区','襄州区']
+  },
+  '四川省': {
+    '成都市': ['锦江区','青羊区','金牛区','武侯区','成华区','龙泉驿区','青白江区','新都区','温江区','双流区'],
+    '绵阳市': ['涪城区','游仙区','安州区']
+  },
+  '山东省': {
+    '济南市': ['历下区','市中区','槐荫区','天桥区','历城区','长清区','章丘区'],
+    '青岛市': ['市南区','市北区','黄岛区','崂山区','李沧区','城阳区','即墨区'],
+    '烟台市': ['芝罘区','福山区','牟平区','莱山区']
+  },
+  '福建省': {
+    '福州市': ['鼓楼区','台江区','仓山区','马尾区','晋安区','长乐区'],
+    '厦门市': ['思明区','海沧区','湖里区','集美区','同安区','翔安区'],
+    '泉州市': ['鲤城区','丰泽区','洛江区','泉港区']
+  },
+  '河南省': {
+    '郑州市': ['中原区','二七区','管城回族区','金水区','上街区','惠济区'],
+    '洛阳市': ['老城区','西工区','瀍河区','涧西区','偃师区','孟津区']
+  }
+};
+
+// ============ Address Picker: 省市区三列联动弹窗 ============
+var addrState = { province: null, city: null, district: null };
+
+function showAddressPicker() {
+  document.getElementById('addrPickerOverlay').classList.remove('hidden');
+  renderProvinceCol();
+  // Clear city/district columns
+  document.getElementById('addrColCity').innerHTML = '<div class="addr-col-title">市</div>';
+  document.getElementById('addrColDistrict').innerHTML = '<div class="addr-col-title">区/县</div>';
+}
+
+function hideAddressPicker() {
+  // If selection is incomplete, reset
+  if (!addrState.district) {
+    addrState = { province: null, city: null, district: null };
+    document.getElementById('addrDisplay').textContent = '请选择省市区';
+    document.getElementById('addrDisplay').style.color = 'var(--text-muted)';
+  }
+  document.getElementById('addrPickerOverlay').classList.add('hidden');
+}
+
+function renderProvinceCol() {
+  var col = document.getElementById('addrColProvince');
+  var html = '<div class="addr-col-title">省/直辖市</div>';
+  Object.keys(addrData).forEach(function(p) {
+    var sel = addrState.province === p ? ' selected' : '';
+    html += '<div class="addr-col-item' + sel + '" onclick="selectProvince(\'' + p + '\')">' + p + '</div>';
+  });
+  col.innerHTML = html;
+}
+
+function renderCityCol() {
+  var col = document.getElementById('addrColCity');
+  var html = '<div class="addr-col-title">市</div>';
+  if (!addrState.province || !addrData[addrState.province]) { col.innerHTML = html; return; }
+  var cities = addrData[addrState.province];
+  Object.keys(cities).forEach(function(c) {
+    var sel = addrState.city === c ? ' selected' : '';
+    html += '<div class="addr-col-item' + sel + '" onclick="selectCity(\'' + c + '\')">' + c + '</div>';
+  });
+  col.innerHTML = html;
+}
+
+function renderDistrictCol() {
+  var col = document.getElementById('addrColDistrict');
+  var html = '<div class="addr-col-title">区/县</div>';
+  if (!addrState.province || !addrState.city) { col.innerHTML = html; return; }
+  var districts = addrData[addrState.province][addrState.city];
+  if (!districts) { col.innerHTML = html; return; }
+  districts.forEach(function(d) {
+    var sel = addrState.district === d ? ' selected' : '';
+    html += '<div class="addr-col-item' + sel + '" onclick="selectDistrict(\'' + d + '\')">' + d + '</div>';
+  });
+  col.innerHTML = html;
+}
+
+function selectProvince(p) {
+  addrState.province = p;
+  addrState.city = null;
+  addrState.district = null;
+  renderProvinceCol();
+  renderCityCol();
+  renderDistrictCol();
+}
+
+function selectCity(c) {
+  addrState.city = c;
+  addrState.district = null;
+  renderCityCol();
+  renderDistrictCol();
+}
+
+function selectDistrict(d) {
+  addrState.district = d;
+  renderDistrictCol();
+  // Update trigger display
+  var display = addrState.province + ' ' + addrState.city + ' ' + d;
+  document.getElementById('addrDisplay').textContent = display;
+  document.getElementById('addrDisplay').style.color = 'var(--text-primary)';
+  // Auto close picker after a brief delay
+  setTimeout(function() { hideAddressPicker(); }, 200);
+}
+
+// ============ Signup Detail ============
+function openSignupDetail(title, time, location, status) {
+  if (status === 'ended') { showToast('该活动已结束，仅可查看详情', 'info'); return; }
+  document.getElementById('signupDetailTitle').textContent = title;
+  document.getElementById('signupDetailMeta').innerHTML =
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:3px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
+    time + ' &nbsp;' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:3px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+    location;
+  openSubPage('signup-detail');
+}
+
+// ============ Radio Selection with bounce ============
+function selectRadio(el) {
+  const group = el.parentElement;
+  group.querySelectorAll('.radio-item').forEach(item => item.classList.remove('selected'));
+  el.classList.add('selected');
+  // Mini bounce on the selected radio circle
+  const circle = el.querySelector('.radio-circle');
+  circle.style.transform = 'scale(1.3)';
+  setTimeout(() => { circle.style.transform = 'scale(1)'; }, 150);
+}
+
+// ============ Feedback Type Selection ============
+function selectFeedbackType(el) {
+  el.parentElement.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ============ Upload with visual feedback ============
+function simulateUpload(el) {
+  el.classList.toggle('has-file');
+  const labelSpan = el.querySelector('span:nth-child(2)');
+  if (el.classList.contains('has-file')) {
+    if (labelSpan) labelSpan.textContent = '\u2705 已选择文件';
+    el.classList.add('flash-success');
+    el.addEventListener('animationend', function h() { el.classList.remove('flash-success'); el.removeEventListener('animationend', h); });
+    showToast('图片已选择（模拟）', 'success');
+  } else {
+    if (labelSpan) labelSpan.textContent = '拍照或从相册选择';
+    showToast('已取消选择', 'info');
+  }
+}
+
+// ============ Multi-image upload (质量问题细节照片) ============
+var defectPhotoCount = 0;
+function simulateMultiUpload(addBtn) {
+  var grid = document.getElementById('defectPhotoGrid');
+  if (!grid) return;
+  defectPhotoCount++;
+  // Create thumbnail
+  var thumb = document.createElement('div');
+  thumb.className = 'upload-thumb has-image';
+  thumb.onclick = function(e) {
+    e.stopPropagation();
+    thumb.remove();
+    defectPhotoCount--;
+    showToast('照片已删除', 'info');
+  };
+  // Generate a random green-tinted SVG placeholder
+  var hue = 100 + Math.floor(Math.random() * 40);
+  var sat = 30 + Math.floor(Math.random() * 30);
+  var svgUrl = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">' +
+    '<rect width="120" height="120" fill="hsl(' + hue + ',25%,90%)"/>' +
+    '<circle cx="45" cy="45" r="15" fill="hsl(' + hue + ',' + sat + '%,65%)" opacity="0.6"/>' +
+    '<path d="M55 60 L85 90 L95 85 L75 55Z" fill="hsl(' + (hue+20) + ',' + sat + '%,55%)" opacity="0.5"/>' +
+    '<text x="60" y="70" text-anchor="middle" font-size="10" fill="#888">' + defectPhotoCount + '</text>' +
+    '</svg>'
+  );
+  var img = document.createElement('img');
+  img.src = svgUrl;
+  img.className = 'upload-thumb-image';
+  img.alt = '缺陷照片 ' + defectPhotoCount;
+  thumb.appendChild(img);
+  // Insert before the add button
+  grid.insertBefore(thumb, addBtn);
+  showToast('照片已添加（模拟）', 'success');
+  if (defectPhotoCount >= 8) {
+    addBtn.style.display = 'none';
+  }
+}
+
+// ============ Multi-image upload (佐证图片, max 4) ============
+var evidencePhotoCount = 0;
+function simulateMultiUploadEvid(addBtn) {
+  var grid = document.getElementById('evidencePhotoGrid');
+  if (!grid) return;
+  evidencePhotoCount++;
+  var thumb = document.createElement('div');
+  thumb.className = 'upload-thumb has-image';
+  thumb.onclick = function(e) {
+    e.stopPropagation();
+    thumb.remove();
+    evidencePhotoCount--;
+    // Show add button if below max
+    if (evidencePhotoCount < 4) {
+      addBtn.style.display = '';
+    }
+    showToast('照片已删除', 'info');
+  };
+  var hue = 40 + Math.floor(Math.random() * 30);
+  var sat = 30 + Math.floor(Math.random() * 40);
+  var svgUrl = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">' +
+    '<rect width="120" height="120" fill="hsl(' + hue + ',30%,92%)"/>' +
+    '<rect x="30" y="25" width="60" height="75" rx="2" fill="hsl(' + hue + ',' + sat + '%,70%)" opacity="0.5"/>' +
+    '<line x1="40" y1="40" x2="80" y2="40" stroke="#999" stroke-width="2" opacity="0.5"/>' +
+    '<line x1="40" y1="50" x2="70" y2="50" stroke="#999" stroke-width="2" opacity="0.5"/>' +
+    '<line x1="40" y1="60" x2="75" y2="60" stroke="#999" stroke-width="2" opacity="0.5"/>' +
+    '<line x1="40" y1="70" x2="65" y2="70" stroke="#999" stroke-width="2" opacity="0.5"/>' +
+    '<text x="60" y="90" text-anchor="middle" font-size="9" fill="#999">' + evidencePhotoCount + '</text>' +
+    '</svg>'
+  );
+  var img = document.createElement('img');
+  img.src = svgUrl;
+  img.className = 'upload-thumb-image';
+  img.alt = '佐证图片 ' + evidencePhotoCount;
+  thumb.appendChild(img);
+  grid.insertBefore(thumb, addBtn);
+  showToast('照片已添加（模拟）', 'success');
+  if (evidencePhotoCount >= 4) {
+    addBtn.style.display = 'none';
+  }
+}
+
+// ============ Submit with loading state ============
+function handleSubmit(type) {
+  var btn = event.target;
+  if (btn.classList.contains('btn-loading')) return;
+
+  // ============ Validation ============
+  var errors = [];
+
+  if (type === '报名') {
+    // 课程报名
+    var nameEl = document.querySelector('#page-signup-detail .form-input[type="text"]');
+    var phoneEl = document.querySelector('#page-signup-detail .form-input[type="tel"]');
+    var stageEl = document.getElementById('cascadeStage');
+    var subjectEl = document.getElementById('cascadeSubject');
+    if (!nameEl || !nameEl.value.trim()) errors.push('请填写姓名');
+    if (!stageEl || !stageEl.value) errors.push('请选择学段');
+    if (!subjectEl || !subjectEl.value) errors.push('请选择学科');
+    // 职称是 select，默认可能已选
+    if (!phoneEl || !phoneEl.value.trim()) { errors.push('请填写联系方式'); }
+    else if (!/^1[3-9]\d{9}$/.test(phoneEl.value.trim())) { errors.push('手机号码格式不正确'); }
+  }
+
+  if (type === '评估') {
+    // 效果评估
+    var actText = document.getElementById('selectedActivityText');
+    if (!actText || actText.textContent === '请选择活动') errors.push('请选择活动');
+    // Check all radio/checkbox questions - at least check that section titles have selections
+    var sections = document.querySelectorAll('#page-eval .form-section');
+    sections.forEach(function(s, si) {
+      var radios = s.querySelectorAll('input[type="radio"]');
+      var checkboxes = s.querySelectorAll('input[type="checkbox"]');
+      if (radios.length > 0) {
+        var checked = s.querySelector('input[type="radio"]:checked');
+        if (!checked) errors.push('第' + (si + 1) + '部分有未选择的题目');
+      }
+      if (checkboxes.length > 0) {
+        var anyChecked = s.querySelector('input[type="checkbox"]:checked');
+        if (!anyChecked) errors.push('第' + (si + 1) + '部分有未选择的多选题');
+      }
+    });
+    // 第14题（培训时间、主题、原因）
+    var q14inputs = document.querySelectorAll('#page-eval .form-input[type="text"]');
+    if (q14inputs.length >= 3) {
+      if (!q14inputs[0].value.trim()) errors.push('请填写第14题培训时间');
+      if (!q14inputs[1].value.trim()) errors.push('请填写第14题培训主题与名称');
+      if (!q14inputs[2].value.trim()) errors.push('请填写第14题印象深刻的原因');
+    }
+    // 培训科目
+    var subjRadios = document.querySelectorAll('#page-eval input[name="subject"]');
+    if (subjRadios.length > 0) {
+      var subjChecked = document.querySelector('#page-eval input[name="subject"]:checked');
+      if (!subjChecked) errors.push('请选择培训科目');
+    }
+    // 联系方式（选填，验证格式）
+    var evalPhone = document.querySelector('#page-eval .form-input[type="tel"]');
+    if (evalPhone && evalPhone.value.trim()) {
+      if (!/^1[3-9]\d{9}$/.test(evalPhone.value.trim())) errors.push('联系方式(手机号)格式不正确');
+    }
+  }
+
+  if (type === '调换申请') {
+    // 教材调换
+    var swapName = document.querySelector('#page-swap .form-input[type="text"]');
+    var swapPhone = document.querySelector('#page-swap .form-input[type="tel"]');
+    var swapAddr = document.querySelector('#page-swap .form-input[placeholder*="详细地址"]');
+    // Upload areas
+    var uploads = document.querySelectorAll('#page-swap .upload-area');
+    var coverUploaded = false, copyUploaded = false;
+    uploads.forEach(function(u) {
+      if (u.classList.contains('has-file')) {
+        if (coverUploaded) copyUploaded = true;
+        else coverUploaded = true;
+      }
+    });
+    if (!coverUploaded) errors.push('请上传教材封面照');
+    if (!copyUploaded) errors.push('请上传教材版权页照片');
+    // Detail photos
+    var thumbs = document.querySelectorAll('#defectPhotoGrid .upload-thumb:not(:first-child)');
+    if (thumbs.length === 0) errors.push('请上传质量问题细节照片');
+    if (!swapName || !swapName.value.trim()) errors.push('请填写收件人姓名');
+    if (!swapPhone || !swapPhone.value.trim()) { errors.push('请填写联系电话'); }
+    else if (!/^1[3-9]\d{9}$/.test(swapPhone.value.trim())) { errors.push('联系电话格式不正确'); }
+    if (!addrState.district) errors.push('请选择省市区');
+    if (!swapAddr || !swapAddr.value.trim()) errors.push('请填写详细地址');
+  }
+
+  if (type === '反馈') {
+    var fbType = document.querySelector('#page-feedback .form-select');
+    var fbContent = document.querySelector('#page-feedback .form-textarea');
+    if (!fbType || !fbType.value) errors.push('请选择问题类型');
+    if (!fbContent || !fbContent.value.trim()) errors.push('请填写反馈内容');
+    // 联系方式（选填）
+    var fbPhone = document.querySelector('#page-feedback .form-input[type="tel"]');
+    if (fbPhone && fbPhone.value.trim()) {
+      if (!/^1[3-9]\d{9}$/.test(fbPhone.value.trim())) errors.push('联系方式(手机号)格式不正确');
+    }
+  }
+
+  if (errors.length > 0) {
+    showToast(errors[0], 'error');
+    return;
+  }
+  // ====================================
+
+  // Enter loading state
+  btn.classList.add('btn-loading');
+  var origText = btn.textContent;
+  btn.textContent = '提交中...';
+
+  setTimeout(function() {
+    btn.classList.remove('btn-loading');
+    showToast(type + '已成功提交！', 'success');
+
+    // Success animation: green flash on page
+    var page = document.getElementById('page-' + (currentSubPage || currentTab));
+    if (page) {
+      page.classList.add('flash-success');
+      page.addEventListener('animationend', function h() { page.classList.remove('flash-success'); page.removeEventListener('animationend', h); });
+    }
+
+    // Restore button
+    btn.textContent = origText;
+
+    // Navigate back after delay
+    setTimeout(function() { if (currentSubPage) closeSubPage(); }, 1200);
+  }, 1000);
+}
+
+// ============ Course Detail ============
+function openCourseDetail(title, tags, speaker, type) {
+  document.getElementById('courseDetailTitle').textContent = title;
+  document.getElementById('courseDetailSpeaker').innerHTML = '<span style="color:var(--text-muted);">讲座人</span> ' + speaker;
+  document.getElementById('courseDetailTags').innerHTML = tags.split(' / ').map(t => '<span class="detail-tag">' + t + '</span>').join('');
+  const isVideo = type === 'video';
+  const isVideoExt = type === 'video-ext';
+  const isPpt = type === 'ppt';
+  // Video player: only for embed video (not video-ext)
+  document.getElementById('videoPlayerWrapper').style.display = isVideo ? '' : 'none';
+  document.getElementById('coursePreviewArea').style.display = (isVideo && !isVideoExt) ? 'none' : '';
+  document.getElementById('courseDownloadBtn').style.display = (isVideo || isVideoExt) ? 'none' : '';
+  document.getElementById('coursePreviewBtn').style.display = isVideo ? '' : 'none';
+  // Preview area
+  const previewArea = document.getElementById('coursePreviewArea');
+  if (isVideoExt) {
+    // External link video: click-to-open style
+    previewArea.className = 'preview-box';
+    previewArea.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-5px;margin-right:4px;"><polygon points="5,3 19,12 5,21"/></svg>'
+      + '点击查看视频课程';
+    previewArea.onclick = function(e) {
+      e.stopPropagation();
+      showToast('正在跳转至外部视频平台...', 'info');
+      setTimeout(function() { window.open('https://example.com/video-course', '_blank'); }, 800);
+    };
+  } else if (!isVideo) {
+    if (isPpt) {
+      previewArea.className = 'preview-box';
+      previewArea.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-5px;margin-right:4px;"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="8" y1="16" x2="14" y2="16"/></svg>'
+        + '点击查看PPT课件<br><span style="font-size:12px;opacity:0.7;font-weight:400;">支持在线预览</span>';
+      previewArea.onclick = null;
+    } else {
+      previewArea.className = 'preview-box';
+      previewArea.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-5px;margin-right:4px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+        + '点击查看PDF课程资料<br><span style="font-size:12px;opacity:0.7;font-weight:400;">支持在线预览</span>';
+      previewArea.onclick = null;
+    }
+  }
+  if (isVideo) {
+    initVideoPlayer();
+  }
+  openSubPage('course-detail');
+}
+
+// ============ Download with loading ============
+function handleDownload() {
+  const btn = event.target.closest('.btn');
+  if (!btn || btn.classList.contains('btn-loading')) return;
+
+  btn.classList.add('btn-loading');
+  btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;">下载中...</span>';
+
+  setTimeout(() => {
+    btn.classList.remove('btn-loading');
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-4px;margin-right:4px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载课程资料';
+    showToast('课程资料下载完成（模拟）', 'success');
+  }, 1200);
+}
+
+// ============ Course Three-Level Cascade Filter ============
+const courseCascade = {
+  subjects: {
+    '小学':   ['语文','数学','英语','科学','道德与法治','音乐','美术','体育','信息技术'],
+    '初中':   ['语文','数学','英语','物理','化学','生物','道德与法治','历史','地理','音乐','美术','体育'],
+    '高中':   ['语文','数学','英语','物理','化学','生物','思想政治','历史','地理','音乐','美术','体育','信息技术']
+  },
+  directions: ['新课标培训','教学方法','教材解析','考试评价','课程开发'],
+  stages:    ['小学','初中','高中']
+};
+
+let filterState = { stage: '', subject: '', direction: '' };
+
+function buildFilterRow(containerId, items, level) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  // Stage level: no "全部" option, select first item by default
+  if (level === 'stage') {
+    filterState.stage = items[0] || '';
+    items.forEach(item => {
+      const chip = document.createElement('span');
+      chip.className = 'filter-chip' + (item === filterState.stage ? ' selected' : '');
+      chip.textContent = item;
+      chip.onclick = function() { setFilter(level, item); };
+      container.appendChild(chip);
+    });
+  } else {
+    // "全部" chip for subject & direction
+    const allChip = document.createElement('span');
+    allChip.className = 'filter-chip selected';
+    allChip.textContent = '全部';
+    allChip.onclick = function() { setFilter(level, ''); };
+    container.appendChild(allChip);
+    // item chips
+    items.forEach(item => {
+      const chip = document.createElement('span');
+      chip.className = 'filter-chip';
+      chip.textContent = item;
+      chip.onclick = function() { setFilter(level, item); };
+      container.appendChild(chip);
+    });
+  }
+}
+
+function setFilter(level, value) {
+  filterState[level] = value;
+  // Update chip selection
+  const map = { stage: 'filterStage', subject: 'filterSubject', direction: 'filterDir' };
+  const container = document.getElementById(map[level]);
+  container.querySelectorAll('.filter-chip').forEach(c => {
+    c.classList.toggle('selected', level === 'stage' ? c.textContent === value : c.textContent === (value || '全部'));
+  });
+
+  // Cascade: stage change → rebuild subjects; subject change → rebuild directions
+  if (level === 'stage') {
+    filterState.subject = '';
+    filterState.direction = '';
+    const subjs = filterState.stage ? courseCascade.subjects[filterState.stage] : [];
+    buildFilterRow('filterSubject', subjs.length ? subjs : [], 'subject');
+    buildFilterRow('filterDir', courseCascade.directions, 'direction');
+  }
+  if (level === 'subject') {
+    filterState.direction = '';
+    buildFilterRow('filterDir', courseCascade.directions, 'direction');
+  }
+
+  applyCourseFilter();
+}
+
+function applyCourseFilter() {
+  const cards = document.querySelectorAll('#courseList .course-card');
+  const empty = document.getElementById('courseEmpty');
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const stage = card.dataset.stage;
+    const subject = card.dataset.subject;
+    const direction = card.dataset.direction;
+    const match = (!filterState.stage || stage === filterState.stage)
+               && (!filterState.subject || subject === filterState.subject)
+               && (!filterState.direction || direction === filterState.direction);
+    card.style.display = match ? '' : 'none';
+    if (match) visibleCount++;
+  });
+
+  empty.style.display = visibleCount === 0 ? '' : 'none';
+}
+
+// Init filters on page load
+(function initCourseFilters() {
+  buildFilterRow('filterStage', courseCascade.stages, 'stage');
+  // Pre-populate subjects for default stage (小学)
+  const defaultSubjects = courseCascade.subjects[filterState.stage] || [];
+  buildFilterRow('filterSubject', defaultSubjects, 'subject');
+  buildFilterRow('filterDir', courseCascade.directions, 'direction');
+  applyCourseFilter();
+})();
+
+// ============ Function Router ============
+function openFunction(type) {
+  const map = { eval: 'eval', swap: 'swap', feedback: 'feedback' };
+  if (map[type]) openSubPage(map[type]);
+}
+
+// ============ Timeline ============
+const tlIllus = {
+  /* 1980 — Founding: classical gate + sunrise */
+  building: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="44" cy="16" r="7" fill="#F0F7F0" stroke="#5BAF74" stroke-width="0.8"/><circle cx="44" cy="16" r="3.5" fill="#D8EFE2"/><line x1="44" y1="5" x2="44" y2="9" stroke="#5BAF74" stroke-width="0.8"/><line x1="44" y1="23" x2="44" y2="27" stroke="#5BAF74" stroke-width="0.8"/><line x1="37" y1="16" x2="41" y2="16" stroke="#5BAF74" stroke-width="0.8"/><line x1="47" y1="16" x2="51" y2="16" stroke="#5BAF74" stroke-width="0.8"/><path d="M26 74V38h28v36" fill="#F2F8F0" stroke="#3DAD68" stroke-width="1"/><rect x="28" y="40" width="24" height="12" rx="1" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><rect x="30" y="42" width="8" height="6" rx="0.5" fill="#D8EFE2"/><rect x="42" y="42" width="8" height="6" rx="0.5" fill="#D8EFE2"/><rect x="30" y="56" width="6" height="8" rx="0.5" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><rect x="44" y="56" width="6" height="8" rx="0.5" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><path d="M22 68h4v6h-4zM54 68h4v6h-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><line x1="24" y1="74" x2="56" y2="74" stroke="#3DAD68" stroke-width="0.8"/></svg>',
+  /* 1985 — First textbook 湖南地理: open book with map */
+  book: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 18h20v40H18a3 3 0 01-3-3V21a3 3 0 013-3z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="1"/><path d="M36 18h24a3 3 0 013 3v34a3 3 0 01-3 3H36" fill="#EAF6EF" stroke="#3DAD68" stroke-width="1"/><path d="M20 26l12 4M20 30l12 4M20 34l12 4" stroke="#B8DEC4" stroke-width="0.7" stroke-linecap="round"/><path d="M20 40a8 8 0 015-2c5 0 9 4 11 5-2 1-6 4-11 3-5-1-7-4-7-4l2-2z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><path d="M40 26l16 6M40 30l14 5M40 34l12 4" stroke="#B8DEC4" stroke-width="0.7" stroke-linecap="round"/><path d="M46 46a6 4 0 015-3c4 0 7 3 8 4-1 1-4 3-8 2-4-1-5-3-5-3z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><path d="M32 22v34" stroke="#3DAD68" stroke-width="0.8" stroke-dasharray="2,2"/><rect x="14" y="6" width="12" height="8" rx="1" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><line x1="16" y1="9" x2="24" y2="9" stroke="#B8DEC4" stroke-width="0.5"/><line x1="16" y1="12" x2="22" y2="12" stroke="#B8DEC4" stroke-width="0.5"/></svg>',
+  /* 1990 — Distribution expansion & warehouse: warehouse with piled boxes */
+  flag: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 30v42h56V30" fill="#F2F8F0" stroke="#3DAD68" stroke-width="1"/><path d="M8 30h64l-6-22H22l-6 22z" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><rect x="30" y="16" width="20" height="8" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.6"/><rect x="36" y="18" width="8" height="4" rx="0.5" fill="#F2F8F0"/><rect x="18" y="36" width="14" height="12" rx="1" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.7"/><line x1="20" y1="42" x2="30" y2="42" stroke="#B8DEC4" stroke-width="0.6"/><rect x="18" y="50" width="14" height="10" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="34" y="36" width="14" height="12" rx="1" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.7"/><line x1="36" y1="42" x2="46" y2="42" stroke="#B8DEC4" stroke-width="0.6"/><rect x="34" y="50" width="14" height="10" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="50" y="40" width="14" height="10" rx="1" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.7"/><rect x="50" y="52" width="14" height="8" rx="1" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.7"/><circle cx="52" cy="54" r="2" fill="#B8DEC4"/><path d="M20 64c2 4 8 8 14 8 4 0 8-2 14-6 6 4 10 6 14 6 6 0 12-4 14-8" fill="none" stroke="#B8DEC4" stroke-width="0.6" stroke-linecap="round"/></svg>',
+  /* 1995 — Designated publisher + printing equipment: printing press */
+  printer: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="16" width="36" height="18" rx="2" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="12" y="20" width="28" height="10" rx="1" fill="#E4F4EA"/><circle cx="20" cy="25" r="4" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><circle cx="32" cy="25" r="4" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="20" y="34" width="12" height="4" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><path d="M44 18l6 6h18l-6-6H44z" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.8"/><rect x="46" y="24" width="22" height="14" rx="1" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="50" y="28" width="14" height="6" rx="0.5" fill="#D8EFE2"/><line x1="50" y1="30" x2="60" y2="30" stroke="#B8DEC4" stroke-width="0.5"/><path d="M30 42h10l2 28h-14l2-28z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="34" y="44" width="2" height="22" fill="#E4F4EA"/><path d="M12 42v28h56V42" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><rect x="20" y="48" width="32" height="16" rx="1" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.7"/><line x1="22" y1="54" x2="50" y2="54" stroke="#B8DEC4" stroke-width="0.6"/><line x1="22" y1="58" x2="48" y2="58" stroke="#B8DEC4" stroke-width="0.6"/></svg>',
+  /* 2000 — R&D department, office expansion to 5000m², 200+ staff: modern office building */
+  doc: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="16" width="32" height="52" rx="2" fill="#F2F8F0" stroke="#3DAD68" stroke-width="1"/><rect x="27" y="22" width="8" height="6" rx="0.5" fill="#D8EFE2"/><rect x="37" y="22" width="8" height="6" rx="0.5" fill="#D8EFE2"/><rect x="47" y="22" width="6" height="6" rx="0.5" fill="#D8EFE2"/><rect x="27" y="31" width="8" height="6" rx="0.5" fill="#E4F4EA"/><rect x="37" y="31" width="8" height="6" rx="0.5" fill="#E4F4EA"/><rect x="47" y="31" width="6" height="6" rx="0.5" fill="#E4F4EA"/><rect x="27" y="40" width="8" height="6" rx="0.5" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.5"/><rect x="37" y="40" width="8" height="6" rx="0.5" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.5"/><rect x="47" y="40" width="6" height="6" rx="0.5" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.5"/><rect x="27" y="49" width="8" height="6" rx="0.5" fill="#E4F4EA"/><rect x="37" y="49" width="8" height="6" rx="0.5" fill="#E4F4EA"/><rect x="47" y="49" width="6" height="6" rx="0.5" fill="#E4F4EA"/><rect x="27" y="58" width="8" height="6" rx="0.5" fill="#D8EFE2"/><rect x="37" y="58" width="8" height="6" rx="0.5" fill="#D8EFE2"/><rect x="47" y="58" width="6" height="6" rx="0.5" fill="#D8EFE2"/><rect x="15" y="4" width="14" height="12" rx="1" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.7"/><line x1="17" y1="8" x2="27" y2="8" stroke="#B8DEC4" stroke-width="0.5"/><line x1="17" y1="12" x2="25" y2="12" stroke="#B8DEC4" stroke-width="0.5"/><rect x="51" y="4" width="14" height="12" rx="1" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.7"/><line x1="53" y1="8" x2="63" y2="8" stroke="#B8DEC4" stroke-width="0.5"/><line x1="53" y1="12" x2="61" y2="12" stroke="#B8DEC4" stroke-width="0.5"/></svg>',
+  /* 2005 — New curriculum, 14-city network: map with connected nodes */
+  glass: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 28c2-4 6-8 12-8 4 0 10 3 14 6 6-4 12-6 16-6 6 0 10 4 12 8" fill="none" stroke="#3DAD68" stroke-width="1.2" stroke-linecap="round"/><circle cx="18" cy="28" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><circle cx="32" cy="24" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><circle cx="50" cy="20" r="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><circle cx="62" cy="28" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><circle cx="58" cy="40" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><circle cx="52" cy="52" r="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><circle cx="38" cy="54" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><circle cx="24" cy="52" r="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><circle cx="16" cy="40" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><circle cx="36" cy="38" r="5" fill="none" stroke="#5BAF74" stroke-width="1.5"/><line x1="21" y1="28" x2="29" y2="25" stroke="#B8DEC4" stroke-width="0.7"/><line x1="35" y1="24" x2="47" y2="21" stroke="#B8DEC4" stroke-width="0.7"/><line x1="53" y1="20" x2="59" y2="28" stroke="#B8DEC4" stroke-width="0.7"/><line x1="58" y1="40" x2="52" y2="49" stroke="#B8DEC4" stroke-width="0.7"/><line x1="49" y1="52" x2="41" y2="53" stroke="#B8DEC4" stroke-width="0.7"/><line x1="35" y1="54" x2="27" y2="52" stroke="#B8DEC4" stroke-width="0.7"/><line x1="21" y1="52" x2="17" y2="40" stroke="#B8DEC4" stroke-width="0.7"/><line x1="19" y1="28" x2="33" y2="36" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/><line x1="39" y1="37" x2="48" y2="21" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/><line x1="39" y1="40" x2="52" y2="52" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/><line x1="33" y1="37" x2="24" y2="52" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/></svg>',
+  /* 2010 — 100M copies milestone + national award: trophy & celebration */
+  trophy: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 8h28l-6 16H32l-6-16z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><path d="M4 24h18l-3 4H7l-3-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><path d="M58 24h18l-3 4H61l-3-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="18" y="2" width="44" height="6" rx="2" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><rect x="22" y="28" width="36" height="4" rx="1" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.7"/><rect x="28" y="32" width="24" height="4" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><path d="M32 36l-6 24h28l-6-24" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="24" y="60" width="32" height="4" rx="1" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><rect x="28" y="64" width="24" height="4" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="32" y="68" width="16" height="4" rx="1" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.6"/><polygon points="40,46 13,52 13,55 40,49" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.5"/><polygon points="40,46 67,52 67,55 40,49" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.5"/><text x="40" y="56" text-anchor="middle" font-size="7" fill="#3DAD68" font-weight="700">奖</text></svg>',
+  /* 2015 — 湘版教材 brand + university cooperation: academic cap + handshake */
+  star: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 48h18v-6l-9-18-9 18v6z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="16" y="22" width="14" height="4" rx="1" fill="#D8EFE2"/><path d="M23 26v20" stroke="#B8DEC4" stroke-width="0.6"/><circle cx="23" cy="20" r="2" fill="#5BAF74"/><path d="M48 48h18v-6l-9-18-9 18v6z" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.8"/><rect x="50" y="22" width="14" height="4" rx="1" fill="#D8EFE2"/><path d="M57 26v20" stroke="#B8DEC4" stroke-width="0.6"/><circle cx="57" cy="20" r="2" fill="#5BAF74"/><path d="M30 54h20" stroke="#3DAD68" stroke-width="1" stroke-linecap="round"/><path d="M32 50c2-2 6-2 8 0" fill="none" stroke="#5BAF74" stroke-width="0.8" stroke-linecap="round"/><path d="M40 50c2-2 6-2 8 0" fill="none" stroke="#5BAF74" stroke-width="0.8" stroke-linecap="round"/><path d="M36 58v6h8v-6" fill="none" stroke="#3DAD68" stroke-width="0.8"/><rect x="10" y="64" width="60" height="6" rx="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.7"/><line x1="20" y1="67" x2="60" y2="67" stroke="#B8DEC4" stroke-width="0.5"/><text x="40" y="71" text-anchor="middle" font-size="6" fill="#3DAD68" font-weight="600">合作共赢</text></svg>',
+  /* 2020 — Textbook revision + digital R&D center: tablet & books hybrid */
+  monitor: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="44" width="20" height="26" rx="1.5" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><line x1="28" y1="50" x2="40" y2="50" stroke="#B8DEC4" stroke-width="0.6"/><line x1="28" y1="54" x2="38" y2="54" stroke="#B8DEC4" stroke-width="0.6"/><line x1="28" y1="58" x2="42" y2="58" stroke="#B8DEC4" stroke-width="0.6"/><line x1="28" y1="62" x2="36" y2="62" stroke="#B8DEC4" stroke-width="0.6"/><path d="M32 70l2 4h-4l2-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.6"/><rect x="40" y="42" width="24" height="30" rx="2" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.8"/><rect x="44" y="46" width="16" height="20" rx="1" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.5"/><circle cx="52" cy="56" r="4" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><line x1="46" y1="62" x2="58" y2="62" stroke="#B8DEC4" stroke-width="0.5"/><line x1="46" y1="65" x2="58" y2="65" stroke="#B8DEC4" stroke-width="0.5"/><path d="M52 18l-6 20h28l-6-20H52z" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><circle cx="52" cy="18" r="5" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><circle cx="52" cy="18" r="2" fill="#5BAF74"/><line x1="46" y1="28" x2="58" y2="28" stroke="#B8DEC4" stroke-width="0.5"/><line x1="44" y1="32" x2="60" y2="32" stroke="#B8DEC4" stroke-width="0.5"/></svg>',
+  /* 2025 — 名师优课 resource library + advanced unit: cloud + courses */
+  net: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 30c0-6 6-10 12-10 4 0 8 2 10 4 2-3 6-4 10-4 6 0 10 3 12 8" fill="none" stroke="#3DAD68" stroke-width="0.8" stroke-linecap="round"/><path d="M18 32c-3 0-6 2-6 5 0 3 3 5 6 5" fill="none" stroke="#5BAF74" stroke-width="0.8" stroke-linecap="round"/><path d="M62 30c-3 0-6 2-6 5 0 3 3 5 6 5" fill="none" stroke="#5BAF74" stroke-width="0.8" stroke-linecap="round"/><rect x="20" y="42" width="40" height="4" rx="2" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="16" y="48" width="48" height="20" rx="2" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="20" y="52" width="16" height="12" rx="1" fill="#E4F4EA" stroke="#B8DEC4" stroke-width="0.5"/><polygon points="26,56 30,58 26,60" fill="#3DAD68" opacity="0.6"/><rect x="40" y="52" width="20" height="12" rx="1" fill="#EAF6EF" stroke="#B8DEC4" stroke-width="0.5"/><line x1="44" y1="56" x2="56" y2="56" stroke="#B8DEC4" stroke-width="0.6"/><line x1="44" y1="60" x2="52" y2="60" stroke="#B8DEC4" stroke-width="0.6"/><path d="M30 20l2 6h6l-5 4 2 6-5-3-5 3 2-6-5-4h6l2-6z" fill="none" stroke="#5BAF74" stroke-width="0.7"/></svg>',
+  /* 2026 — Digital transformation + smart platform: rocket + gears */
+  rocket: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 50l-5 8h10l-5-8z" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><path d="M40 34v16" stroke="#3DAD68" stroke-width="0.8"/><path d="M36 48l-6 6h20l-6-6" fill="none" stroke="#B8DEC4" stroke-width="0.7"/><path d="M40 8l-14 28h28L40 8z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><ellipse cx="40" cy="14" rx="6" ry="4" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><circle cx="40" cy="14" r="2" fill="#5BAF74"/><line x1="30" y1="24" x2="50" y2="24" stroke="#B8DEC4" stroke-width="0.6"/><path d="M24 60c4 4 10 6 16 6 6 0 12-2 16-6" fill="none" stroke="#B8DEC4" stroke-width="0.6" stroke-linecap="round"/><circle cx="26" cy="64" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.6"/><circle cx="40" cy="66" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.6"/><circle cx="54" cy="64" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.6"/><line x1="26" y1="60" x2="26" y2="68" stroke="#B8DEC4" stroke-width="0.5"/><line x1="40" y1="62" x2="40" y2="70" stroke="#B8DEC4" stroke-width="0.5"/><line x1="54" y1="60" x2="54" y2="68" stroke="#B8DEC4" stroke-width="0.5"/></svg>',
+};
+
+const timelineData = [
+  { year: 1980, events: ['湖南省出版中心正式成立', '开始承担省内中小学教材出版发行工作'], illus: 'building' },
+  { year: 1985, events: ['出版第一套本省教材《湖南地理》', '员工人数突破50人', '建立首个教材编写组'], illus: 'book' },
+  { year: 1990, events: ['业务扩展至全省所有地市', '建立首个教材仓库', '年发行量突破100万册'], illus: 'flag' },
+  { year: 1995, events: ['成为湖南省中小学教材指定出版单位', '引进先进印刷设备'], illus: 'printer' },
+  { year: 2000, events: ['成立教材研发部，启动自主教材编写', '办公面积扩至5000平方米', '员工人数突破200人'], illus: 'doc' },
+  { year: 2005, events: ['启动新一轮课程标准教材编写', '建成覆盖全省14个市州的发行网络'], illus: 'glass' },
+  { year: 2010, events: ['教材发行量突破1亿册', '荣获国家级教学成果奖'], illus: 'trophy' },
+  { year: 2015, events: ['启动"湘版教材"品牌战略', '与多家高校建立教研合作基地'], illus: 'star' },
+  { year: 2020, events: ['完成全省中小学教材全面改版工作', '建成数字化教材研发中心'], illus: 'monitor' },
+  { year: 2025, events: ['启动"名师优课"线上资源库建设', '获评全国出版行业先进单位'], illus: 'net' },
+  { year: 2026, events: ['全面数字化转型', '推出智慧教育服务平台', '服务全省超1000万师生'], illus: 'rocket' }
+];
+
+function buildTimeline() {
+  const container = document.getElementById('timelineContainer');
+  let html = '';
+  timelineData.slice().reverse().forEach(function(node) {
+    html += '<div class="tl-node">'
+      + '<div class="tl-trigger" onclick="toggleTimelineNode(this)">'
+      + '<div class="tl-year-big">' + node.year + '<span class="tl-year-suffix">年</span></div>'
+      + '<span class="tl-arrow">&#9660;</span>'
+      + '</div>'
+      + '<div class="tl-card-scroll">'
+      + '<div class="tl-card-inner">'
+      + '<div class="tl-content-left">'
+      + '<div class="tl-events-scroll"><ol>';
+    node.events.forEach(function(e) {
+      html += '<li>' + e + '</li>';
+    });
+    html += '</ol></div>'
+      + '</div>';
+    if (node.illus && tlIllus[node.illus]) {
+      html += '<div class="tl-illus-scroll">' + tlIllus[node.illus] + '</div>';
+    }
+    html += '</div></div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleTimelineNode(trigger) {
+  const node = trigger.parentElement;
+  node.classList.toggle('collapsed');
+}
+
+buildTimeline();
+
+// ============ Activity Picker ============
+var activityList = [
+  '2026年湖南省小学语文教师新课标培训班',
+  '2026年湖南省初中数学骨干教师研修班',
+  '2026年湖南省高中英语阅读教学专题培训',
+  '2026年湖南省中小学教师信息化素养提升培训',
+  '2026年湖南省乡村教师教学能力提升班',
+];
+
+function showActivityPicker() {
+  var overlay = document.getElementById('activityPickerOverlay');
+  var list = document.getElementById('activityPickerList');
+  var cur = document.getElementById('selectedActivityText').textContent.trim();
+  list.innerHTML = activityList.map(function(a) {
+    return '<div class="picker-item' + (a === cur ? ' selected' : '') + '" onclick="selectActivity(\'' + a.replace(/'/g, "\\'") + '\')">' + a + '</div>';
+  }).join('');
+  overlay.classList.remove('hidden');
+}
+
+function hideActivityPicker() {
+  document.getElementById('activityPickerOverlay').classList.add('hidden');
+}
+
+function selectActivity(name) {
+  document.getElementById('selectedActivityText').textContent = name;
+  hideActivityPicker();
+}
+
+// ============ Video Player ============
+function initVideoPlayer() {
+  const video = document.getElementById('courseVideo');
+  // Use a sample video; in production this would come from backend
+  video.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
+  video.load();
+  video.currentTime = 0;
+  document.getElementById('videoProgress').value = 0;
+  document.getElementById('videoCurTime').textContent = '0:00';
+  document.getElementById('videoDurTime').textContent = '0:00';
+  document.getElementById('videoOverlayPlay').style.opacity = '1';
+  updateVideoPlayIcon(true);
+
+  video.onloadedmetadata = function() {
+    document.getElementById('videoDurTime').textContent = formatVideoTime(video.duration);
+    document.getElementById('videoProgress').max = Math.floor(video.duration);
+  };
+  video.ontimeupdate = function() {
+    if (video.duration) {
+      document.getElementById('videoProgress').value = Math.floor(video.currentTime);
+      document.getElementById('videoCurTime').textContent = formatVideoTime(video.currentTime);
+    }
+  };
+  video.onplay = function() {
+    document.getElementById('videoOverlayPlay').style.opacity = '0';
+    updateVideoPlayIcon(false);
+  };
+  video.onpause = function() {
+    updateVideoPlayIcon(true);
+  };
+  video.onended = function() {
+    updateVideoPlayIcon(true);
+    document.getElementById('videoOverlayPlay').style.opacity = '1';
+  };
+}
+
+function toggleVideoPlay() {
+  const video = document.getElementById('courseVideo');
+  if (!video.src) return;
+  if (video.paused) { video.play(); }
+  else { video.pause(); }
+}
+
+function updateVideoPlayIcon(isPaused) {
+  const icon = document.getElementById('videoPlayIcon');
+  if (isPaused) {
+    icon.innerHTML = '<polygon points="8,5 19,12 8,19"/>';
+  } else {
+    icon.innerHTML = '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+  }
+}
+
+function seekVideo(val) {
+  const video = document.getElementById('courseVideo');
+  if (!video.duration) return;
+  video.currentTime = val;
+}
+
+function cycleVideoSpeed() {
+  const video = document.getElementById('courseVideo');
+  const btn = document.getElementById('videoSpeedBtn');
+  const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  const cur = video.playbackRate;
+  const idx = speeds.indexOf(cur);
+  const next = idx >= 0 && idx < speeds.length - 1 ? speeds[idx + 1] : speeds[0];
+  video.playbackRate = next;
+  btn.textContent = next + 'x';
+}
+
+function toggleFullscreen() {
+  const wrapper = document.getElementById('videoPlayerWrapper');
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    if (wrapper.requestFullscreen) { wrapper.requestFullscreen(); }
+    else if (wrapper.webkitRequestFullscreen) { wrapper.webkitRequestFullscreen(); }
+  }
+}
+
+function formatVideoTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+</script>
+
+<!-- Activity Picker Popup -->
+<!-- 省市区选择弹窗 -->
+<div class="picker-overlay hidden" id="addrPickerOverlay" onclick="hideAddressPicker()">
+  <div class="picker-sheet" onclick="event.stopPropagation()" style="max-height:70vh;">
+    <div class="picker-header">
+      <span class="picker-title">选择地区</span>
+      <button class="picker-close" onclick="hideAddressPicker()">取消</button>
+    </div>
+    <div class="addr-picker-columns" id="addrPickerColumns">
+      <div class="addr-picker-col" id="addrColProvince"><div class="addr-col-title">省/直辖市</div></div>
+      <div class="addr-picker-col" id="addrColCity"><div class="addr-col-title">市</div></div>
+      <div class="addr-picker-col" id="addrColDistrict"><div class="addr-col-title">区/县</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="picker-overlay hidden" id="activityPickerOverlay" onclick="hideActivityPicker()">
+  <div class="picker-sheet" onclick="event.stopPropagation()">
+    <div class="picker-header">
+      <span class="picker-title">选择活动</span>
+      <button class="picker-close" onclick="hideActivityPicker()">取消</button>
+    </div>
+    <div id="activityPickerList"></div>
+  </div>
+</div>
+
+</body>
+</html>
