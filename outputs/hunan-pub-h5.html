@@ -225,7 +225,7 @@
   /* Course card */
   .course-card .cover {
     width: 100%;
-    height: 120px;
+    height: 150px;
     border-radius: var(--radius-md);
     margin-bottom: 10px;
     overflow: hidden;
@@ -415,65 +415,87 @@
     padding: 26px 16px 32px;
   }
   .timeline-modern {
-    display: flex; flex-direction: column; gap: 20px;
+    display: flex; flex-direction: column; gap: 6px;
+    padding-left: 4px;
   }
   .tl-node {
     position: relative;
+    padding-left: 20px;
+  }
+  /* Timeline vertical track — dotted connector line */
+  .tl-node::before {
+    content: '';
+    position: absolute; left: 3px; top: 0; bottom: 0; width: 0;
+    border-left: 2px dashed rgba(91,175,116,0.18);
+  }
+  .tl-node:last-child::before { height: 50%; }
+  /* Timeline node dot */
+  .tl-node::after {
+    content: '';
+    position: absolute; left: -2px; top: 19px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #FFFFFF;
+    border: 2.5px solid #5BAF74;
+    box-shadow: 0 0 0 4px rgba(91,175,116,0.06);
+    z-index: 2;
   }
   /* Year header row */
   .tl-trigger {
-    display: flex; align-items: center; gap: 12px;
+    display: flex; align-items: center; gap: 10px;
     cursor: pointer; -webkit-tap-highlight-color: transparent;
-    user-select: none; margin-bottom: 14px;
-    padding: 2px 0;
+    user-select: none; margin-bottom: 10px;
+    padding: 8px 12px 8px 0;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+  }
+  .tl-trigger:active {
+    background: rgba(91,175,116,0.05);
   }
   .tl-year-big {
-    font-size: 28px; font-weight: 900; color: #1A3322;
+    font-size: 26px; font-weight: 900; color: #1A3322;
     letter-spacing: 1px;
-    display: flex; align-items: baseline; gap: 6px;
+    display: flex; align-items: baseline; gap: 8px;
     text-shadow: 0 1px 2px rgba(26,51,34,0.06);
+    flex: 1;
   }
   .tl-year-suffix {
-    font-size: 15px; font-weight: 600; color: #5BAF74;
-    letter-spacing: 1px;
+    font-size: 14px; font-weight: 600; color: #5BAF74;
+    letter-spacing: 1.5px;
   }
   .tl-arrow {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: 50%;
-    font-size: 13px; color: #5BAF74;
-    background: rgba(91,175,116,0.10);
-    transition: transform 0.3s ease;
-    box-shadow: 0 1px 2px rgba(91,175,116,0.08);
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 11px; color: #5BAF74;
+    background: rgba(91,175,116,0.08);
+    border: 1.5px solid rgba(91,175,116,0.18);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s ease, color 0.25s ease;
+    flex-shrink: 0;
   }
   .tl-node.collapsed .tl-arrow {
     transform: rotate(-90deg);
     background: rgba(91,175,116,0.16);
+    border-color: rgba(91,175,116,0.28);
+    color: #3D7A4A;
   }
   /* Event card */
   .tl-card-scroll {
     background: #FFFFFF;
-    border-radius: 14px;
-    border: 1.5px solid #E8E3D4;
+    border-radius: 12px;
+    border: 1px solid rgba(91,175,116,0.14);
+    border-left: 3px solid #5BAF74;
     box-shadow:
-      0 2px 6px rgba(0,0,0,0.04),
-      0 6px 18px rgba(0,0,0,0.03);
+      0 2px 8px rgba(0,0,0,0.03),
+      0 4px 16px rgba(0,0,0,0.02);
     overflow: hidden;
-    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.4s ease, border-width 0.4s ease;
     max-height: 600px; opacity: 1;
   }
   .tl-node.collapsed .tl-card-scroll {
-    max-height: 0; opacity: 0; border-width: 0; box-shadow: none;
+    max-height: 0; opacity: 0; border-width: 0; box-shadow: none; margin-bottom: -6px;
   }
-  /* Thin green top accent bar on each card */
-  .tl-card-scroll::before {
-    content: ''; display: block; height: 3px;
-    background: linear-gradient(90deg, #5BAF74, #7ECF93, #5BAF74);
-    opacity: 0.6;
-  }
-  .tl-node.collapsed .tl-card-scroll::before { height: 0; }
   .tl-card-inner {
-    display: flex; gap: 18px; align-items: flex-start;
-    padding: 20px 18px 22px;
+    display: flex; gap: 20px; align-items: flex-start;
+    padding: 18px 18px 20px;
   }
   .tl-content-left { flex: 1; min-width: 0; }
   .tl-events-scroll ol {
@@ -482,7 +504,7 @@
   .tl-events-scroll ol li {
     counter-increment: tl-counter;
     font-size: 14px; color: #444F3C; line-height: 1.85;
-    padding: 6px 0 6px 32px; position: relative;
+    padding: 6px 0 6px 34px; position: relative;
     letter-spacing: 0.3px;
   }
   .tl-events-scroll ol li::before {
@@ -509,19 +531,20 @@
       drop-shadow(0 0 1px rgba(29,62,38,0.12));
   }
   /* Latest year card — prominent green accent */
+  .tl-node:first-child::after {
+    border-color: #3D9A5A;
+    border-width: 2.5px;
+    box-shadow: 0 0 0 5px rgba(61,154,90,0.10);
+  }
   .tl-node:first-child .tl-year-big {
-    color: #0F4D26; font-size: 30px;
+    color: #0F4D26; font-size: 28px;
     text-shadow: 0 1px 3px rgba(15,77,38,0.08);
   }
   .tl-node:first-child .tl-card-scroll {
-    border-color: #B8DEC6;
+    border-left-color: #3D9A5A;
     box-shadow:
-      0 2px 8px rgba(61,154,90,0.08),
-      0 8px 24px rgba(61,154,90,0.06);
-  }
-  .tl-node:first-child .tl-card-scroll::before {
-    background: linear-gradient(90deg, #3D9A5A, #6CC686, #3D9A5A);
-    height: 4px; opacity: 0.85;
+      0 2px 10px rgba(61,154,90,0.06),
+      0 6px 20px rgba(61,154,90,0.04);
   }
   .tl-node:first-child .tl-events-scroll ol li::before {
     background: linear-gradient(145deg, #3D9A5A 0%, #2D8743 100%);
@@ -825,7 +848,7 @@
 
   /* Detail page */
   .detail-cover {
-    width: 100%; height: 180px; border-radius: var(--radius-lg);
+    width: 100%; height: 150px; border-radius: var(--radius-lg);
     overflow: hidden; margin-bottom: 14px; position: relative;
   }
   .detail-cover svg { width: 100%; height: 100%; }
@@ -976,21 +999,66 @@
           <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#D0F0DC"/>
-                <stop offset="50%" style="stop-color:#B8E6CC"/>
-                <stop offset="100%" style="stop-color:#8DD8A8"/>
+                <stop offset="0%" style="stop-color:#0F3B24"/>
+                <stop offset="100%" style="stop-color:#1B5C3A"/>
               </linearGradient>
             </defs>
             <rect width="340" height="150" fill="url(#g1)"/>
-            <circle cx="280" cy="20" r="60" fill="white" opacity="0.15"/>
-            <circle cx="300" cy="80" r="40" fill="white" opacity="0.1"/>
-            <circle cx="30" cy="110" r="50" fill="white" opacity="0.12"/>
-            <rect x="140" y="30" width="4" height="90" rx="2" fill="white" opacity="0.4"/>
-            <rect x="152" y="40" width="4" height="70" rx="2" fill="white" opacity="0.3"/>
-            <rect x="164" y="50" width="4" height="50" rx="2" fill="white" opacity="0.2"/>
-            <rect x="60" y="50" width="60" height="6" rx="3" fill="white" opacity="0.4"/>
-            <rect x="60" y="65" width="50" height="6" rx="3" fill="white" opacity="0.3"/>
-            <rect x="60" y="80" width="55" height="6" rx="3" fill="white" opacity="0.2"/>
+            <!-- 背景纹理 -->
+            <circle cx="300" cy="15" r="80" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="20" cy="140" r="60" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="180" cy="75" r="90" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="160" cy="130" r="40" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="310" cy="100" r="30" fill="rgba(255,255,255,0.015)"/>
+            <!-- 散落光点 -->
+            <circle cx="270" cy="20" r="1.5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="290" cy="50" r="1" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="320" cy="70" r="1.2" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="15" cy="30" r="1" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="50" cy="130" r="1.5" fill="rgba(255,255,255,0.08)"/>
+            <!-- 窗户 -->
+            <rect x="260" y="15" width="50" height="55" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <line x1="285" y1="15" x2="285" y2="70" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <line x1="260" y1="42" x2="310" y2="42" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <!-- 黑板 -->
+            <rect x="30" y="15" width="130" height="75" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <rect x="40" y="22" width="110" height="28" rx="2" fill="rgba(255,255,255,0.05)"/>
+            <line x1="48" y1="29" x2="142" y2="29" stroke="rgba(255,255,255,0.18)" stroke-width="1.2"/>
+            <line x1="48" y1="36" x2="135" y2="36" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="48" y1="43" x2="140" y2="43" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <line x1="55" y1="74" x2="150" y2="74" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <!-- 粉笔 -->
+            <rect x="35" y="80" width="12" height="3" rx="1.5" fill="rgba(255,255,255,0.2)" transform="rotate(15,41,81.5)"/>
+            <rect x="55" y="78" width="10" height="3" rx="1.5" fill="rgba(255,255,255,0.12)" transform="rotate(-10,60,79.5)"/>
+            <!-- 讲台 -->
+            <rect x="35" y="95" width="120" height="30" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <rect x="55" y="100" width="35" height="20" rx="2" fill="rgba(255,255,255,0.1)"/>
+            <rect x="95" y="102" width="14" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
+            <!-- 盆栽 -->
+            <rect x="155" y="100" width="10" height="12" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+            <circle cx="160" cy="92" r="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <circle cx="156" cy="88" r="5" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="165" cy="90" r="4" fill="rgba(255,255,255,0.03)"/>
+            <!-- 学生区—课桌1 -->
+            <rect x="175" y="32" width="62" height="45" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <rect x="182" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.1)"/>
+            <rect x="210" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <!-- 课桌2 -->
+            <rect x="250" y="32" width="62" height="45" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+            <rect x="257" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <rect x="285" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.06)"/>
+            <!-- 小人1 -->
+            <circle cx="195" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <path d="M190 92 Q195 88 200 92 L198 105 L192 105 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+            <!-- 小人2 -->
+            <circle cx="225" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M220 92 Q225 88 230 92 L228 105 L222 105 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <!-- 小人3 -->
+            <circle cx="260" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M255 92 Q260 88 265 92 L263 105 L257 105 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <!-- 小人4 -->
+            <circle cx="290" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <path d="M285 92 Q290 88 295 92 L293 105 L287 105 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
           </svg>
         </div>
         <span class="tag active">进行中</span>
@@ -1010,18 +1078,58 @@
           <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#D8F0E0"/>
-                <stop offset="50%" style="stop-color:#C0E8D0"/>
-                <stop offset="100%" style="stop-color:#A0DCB8"/>
+                <stop offset="0%" style="stop-color:#1A3A58"/>
+                <stop offset="100%" style="stop-color:#2A5A88"/>
               </linearGradient>
             </defs>
             <rect width="340" height="150" fill="url(#g2)"/>
-            <circle cx="60" cy="30" r="70" fill="white" opacity="0.12"/>
-            <circle cx="270" cy="120" r="80" fill="white" opacity="0.1"/>
-            <path d="M130 40 L240 40 L185 120 Z" fill="white" opacity="0.15"/>
-            <rect x="30" y="50" width="50" height="7" rx="3.5" fill="white" opacity="0.35"/>
-            <rect x="30" y="65" width="42" height="7" rx="3.5" fill="white" opacity="0.25"/>
-            <rect x="30" y="80" width="46" height="7" rx="3.5" fill="white" opacity="0.18"/>
+            <circle cx="30" cy="20" r="70" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="310" cy="130" r="60" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="170" cy="75" r="100" fill="rgba(255,255,255,0.015)"/>
+            <circle cx="280" cy="25" r="35" fill="rgba(255,255,255,0.02)"/>
+            <!-- 散落光点 -->
+            <circle cx="15" cy="90" r="1.5" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="300" cy="50" r="1" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="180" cy="130" r="1.2" fill="rgba(255,255,255,0.09)"/>
+            <circle cx="320" cy="110" r="1" fill="rgba(255,255,255,0.1)"/>
+            <!-- 打开的书 -->
+            <path d="M40 35 Q40 70 75 95 Q75 70 40 35Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M110 35 Q110 70 75 95 Q75 70 110 35Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="50" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+            <line x1="52" y1="58" x2="98" y2="58" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <line x1="54" y1="66" x2="96" y2="66" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+            <line x1="58" y1="74" x2="92" y2="74" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+            <!-- 书签 -->
+            <rect x="72" y="78" width="6" height="18" rx="1" fill="rgba(255,255,255,0.12)"/>
+            <!-- 放大镜 -->
+            <circle cx="155" cy="55" r="18" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.8"/>
+            <circle cx="155" cy="55" r="14" fill="rgba(255,255,255,0.06)"/>
+            <line x1="168" y1="68" x2="185" y2="85" stroke="rgba(255,255,255,0.15)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- 放大镜光效 -->
+            <circle cx="155" cy="55" r="16" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="4"/>
+            <!-- 对勾文档 -->
+            <rect x="195" y="35" width="50" height="65" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <line x1="203" y1="48" x2="237" y2="48" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+            <line x1="203" y1="56" x2="233" y2="56" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="203" y1="64" x2="237" y2="64" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <path d="M210 76 L218 84 L234 68" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- 尺子 -->
+            <rect x="195" y="105" width="55" height="6" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+            <line x1="202" y1="105" x2="202" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="210" y1="105" x2="210" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="218" y1="105" x2="218" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="226" y1="105" x2="226" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="234" y1="105" x2="234" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="242" y1="105" x2="242" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <!-- 教育图标 -->
+            <rect x="260" y="50" width="50" height="50" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <path d="M268 62 L285 52 L302 62 L285 72Z" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" stroke-linejoin="round"/>
+            <line x1="268" y1="62" x2="268" y2="78" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="302" y1="62" x2="302" y2="78" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <circle cx="285" cy="55" r="3" fill="rgba(255,255,255,0.12)"/>
+            <!-- 装饰环 -->
+            <circle cx="130" cy="130" r="18" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <circle cx="130" cy="130" r="14" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
           </svg>
         </div>
         <span class="tag active">进行中</span>
@@ -1036,20 +1144,59 @@
         </div>
       </div>
 
-      <div class="card activity-card ended-card" onclick="showToast('该活动已结束，仅可查看详情')">
+      <div class="card activity-card ended-card" onclick="showToast('该活动已结束', 'info')">
         <div class="cover">
           <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#E8E8E8"/>
-                <stop offset="100%" style="stop-color:#D5D5D5"/>
+                <stop offset="0%" style="stop-color:#4A4A52"/>
+                <stop offset="100%" style="stop-color:#636370"/>
               </linearGradient>
             </defs>
             <rect width="340" height="150" fill="url(#g3)"/>
-            <rect x="80" y="35" width="180" height="80" rx="10" fill="white" opacity="0.4"/>
-            <rect x="110" y="50" width="50" height="7" rx="3.5" fill="white" opacity="0.5"/>
-            <rect x="110" y="65" width="40" height="7" rx="3.5" fill="white" opacity="0.35"/>
-            <rect x="110" y="80" width="45" height="7" rx="3.5" fill="white" opacity="0.22"/>
+            <circle cx="300" cy="20" r="70" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="30" cy="130" r="50" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="170" cy="75" r="90" fill="rgba(255,255,255,0.015)"/>
+            <!-- 散落光点 -->
+            <circle cx="320" cy="100" r="1.5" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="15" cy="50" r="1" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="100" cy="15" r="1.2" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="330" cy="140" r="1" fill="rgba(255,255,255,0.07)"/>
+            <!-- 堆叠书本 -->
+            <rect x="50" y="85" width="80" height="10" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+            <rect x="48" y="77" width="78" height="10" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <rect x="52" y="69" width="74" height="10" rx="2" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.14)" stroke-width="0.8"/>
+            <line x1="62" y1="74" x2="118" y2="74" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+            <!-- 证书卷轴 -->
+            <rect x="45" y="105" width="55" height="35" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <line x1="55" y1="115" x2="90" y2="115" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <line x1="55" y1="122" x2="85" y2="122" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <rect x="41" y="106" width="6" height="32" rx="3" fill="rgba(255,255,255,0.1)"/>
+            <rect x="98" y="106" width="6" height="32" rx="3" fill="rgba(255,255,255,0.1)"/>
+            <!-- 毕业帽 -->
+            <path d="M95 45 L95 65" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M75 48 L95 38 L115 48" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" stroke-linejoin="round"/>
+            <rect x="88" y="46" width="14" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+            <path d="M103 48 L108 55 L98 55Z" fill="rgba(255,255,255,0.06)"/>
+            <!-- 流苏 -->
+            <line x1="95" y1="52" x2="100" y2="62" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+            <!-- 完成勾 -->
+            <circle cx="170" cy="55" r="20" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+            <circle cx="170" cy="55" r="22" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="2"/>
+            <path d="M160 55 L167 62 L180 49" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- 桂冠左 -->
+            <path d="M155 30 Q145 25 140 35 Q148 32 155 33" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <path d="M140 35 Q135 50 145 55" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+            <!-- 桂冠右 -->
+            <path d="M185 30 Q195 25 200 35 Q192 32 185 33" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <path d="M200 35 Q205 50 195 55" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+            <!-- 右侧：三本书 -->
+            <rect x="220" y="38" width="20" height="52" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <rect x="235" y="35" width="20" height="55" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <rect x="250" y="42" width="22" height="48" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+            <!-- 书本装饰线 -->
+            <line x1="224" y1="46" x2="236" y2="46" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+            <line x1="239" y1="43" x2="251" y2="43" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
           </svg>
         </div>
         <span class="tag ended">已结束</span>
@@ -1070,19 +1217,47 @@
       <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:2px;font-weight:700;" id="signupDetailTitle"></h3>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;" id="signupDetailMeta"></p>
       <div class="detail-cover" id="signupDetailCover">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="gd1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#D0F0DC"/>
-              <stop offset="100%" style="stop-color:#8DD8A8"/>
+              <stop offset="0%" style="stop-color:#0F3B24"/>
+              <stop offset="100%" style="stop-color:#1D6A3F"/>
             </linearGradient>
           </defs>
-          <rect width="340" height="180" fill="url(#gd1)"/>
-          <circle cx="290" cy="30" r="55" fill="white" opacity="0.12"/>
-          <circle cx="50" cy="150" r="40" fill="white" opacity="0.1"/>
-          <rect x="100" y="40" width="6" height="100" rx="3" fill="white" opacity="0.35"/>
-          <rect x="116" y="55" width="6" height="70" rx="3" fill="white" opacity="0.25"/>
-          <rect x="132" y="70" width="6" height="40" rx="3" fill="white" opacity="0.18"/>
+          <rect width="340" height="150" fill="url(#gd1)"/>
+          <circle cx="300" cy="20" r="90" fill="rgba(255,255,255,0.03)"/>
+          <circle cx="20" cy="160" r="70" fill="rgba(255,255,255,0.02)"/>
+          <circle cx="170" cy="90" r="120" fill="rgba(255,255,255,0.015)"/>
+          <circle cx="280" cy="140" r="40" fill="rgba(255,255,255,0.02)"/>
+          <!-- 散落光点 -->
+          <circle cx="50" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/>
+          <circle cx="320" cy="80" r="1" fill="rgba(255,255,255,0.08)"/>
+          <circle cx="25" cy="100" r="1.2" fill="rgba(255,255,255,0.09)"/>
+          <circle cx="300" cy="170" r="1" fill="rgba(255,255,255,0.07)"/>
+          <circle cx="160" cy="15" r="1" fill="rgba(255,255,255,0.1)"/>
+          <!-- 剪贴板 -->
+          <rect x="100" y="28" width="140" height="110" rx="5" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+          <rect x="160" y="18" width="20" height="15" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+          <!-- 夹子 -->
+          <circle cx="170" cy="21" r="3" fill="rgba(255,255,255,0.12)"/>
+          <!-- 表单行 -->
+          <rect x="115" y="46" width="110" height="14" rx="3" fill="rgba(255,255,255,0.04)"/>
+          <line x1="118" y1="69" x2="222" y2="69" stroke="rgba(255,255,255,0.09)" stroke-width="1.2"/>
+          <line x1="118" y1="81" x2="218" y2="81" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <line x1="118" y1="93" x2="195" y2="93" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- 对勾 -->
+          <rect x="118" y="103" width="14" height="14" rx="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+          <path d="M120 110 L124 114 L131 105" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="140" y1="110" x2="190" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <!-- 签字 -->
+          <path d="M160 128 Q170 120 175 128 Q180 136 190 125" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- 笔 -->
+          <rect x="260" y="50" width="5" height="70" rx="2" fill="rgba(255,255,255,0.08)"/>
+          <polygon points="260,50 265,50 262.5,38" fill="rgba(255,255,255,0.1)"/>
+          <rect x="261" y="80" width="3" height="15" rx="1" fill="rgba(255,255,255,0.04)"/>
+          <!-- 装饰环 -->
+          <circle cx="85" cy="160" r="15" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <circle cx="85" cy="160" r="10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.8"/>
         </svg>
       </div>
       <div class="form-group"><label class="form-label">姓名<span class="required">*</span></label><input class="form-input" type="text" placeholder="请输入您的姓名"></div>
@@ -1210,13 +1385,40 @@
       <div id="courseList">
         <div class="card course-card" data-stage="小学" data-subject="语文" data-direction="新课标培训" onclick="openCourseDetail('小学语文新课标解读', '小学 / 语文 / 新课标培训', '张明华', 'video')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#DCEFE4"/><stop offset="100%" style="stop-color:#B8E0C8"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc1)"/>
-              <circle cx="290" cy="20" r="45" fill="white" opacity="0.12"/>
-              <circle cx="50" cy="90" r="35" fill="white" opacity="0.1"/>
-              <polygon points="155,30 175,60 135,60" fill="white" opacity="0.5"/>
-              <rect x="150" y="68" width="16" height="30" rx="3" fill="white" opacity="0.35"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0F3B24"/><stop offset="100%" style="stop-color:#1D6A3F"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc1)"/>
+              <circle cx="300" cy="15" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="110" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="70" fill="rgba(255,255,255,0.015)"/>
+              <circle cx="270" cy="95" r="25" fill="rgba(255,255,255,0.02)"/>
+              <!-- 散落光点 -->
+              <circle cx="20" cy="25" r="1" fill="rgba(255,255,255,0.12)"/>
+              <circle cx="310" cy="60" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="260" cy="105" r="0.8" fill="rgba(255,255,255,0.1)"/>
+              <!-- 语文书打开 -->
+              <path d="M50 25 Q50 55 80 75 Q80 55 50 25Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="0.8"/>
+              <path d="M110 25 Q110 55 80 75 Q80 55 110 25Z" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="58" y1="36" x2="102" y2="36" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+              <line x1="60" y1="44" x2="100" y2="44" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="62" y1="52" x2="98" y2="52" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <line x1="55" y1="60" x2="105" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 拼音装饰环 -->
+              <circle cx="145" cy="40" r="16" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="155" cy="52" r="8" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 笔 -->
+              <rect x="145" y="62" width="4" height="38" rx="2" fill="rgba(255,255,255,0.12)"/>
+              <polygon points="145,62 149,62 147,52" fill="rgba(255,255,255,0.1)"/>
+              <rect x="160" y="62" width="4" height="30" rx="2" fill="rgba(255,255,255,0.08)"/>
+              <polygon points="160,62 164,62 162,54" fill="rgba(255,255,255,0.06)"/>
+              <!-- 田字格 -->
+              <rect x="200" y="45" width="40" height="40" rx="2" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+              <line x1="220" y1="45" x2="220" y2="85" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+              <line x1="200" y1="65" x2="240" y2="65" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+              <!-- 装饰点 -->
+              <circle cx="280" cy="50" r="6" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+              <circle cx="285" cy="60" r="3" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="275" cy="65" r="2" fill="rgba(255,255,255,0.03)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
@@ -1224,14 +1426,37 @@
         </div>
         <div class="card course-card" data-stage="初中" data-subject="数学" data-direction="教学方法" onclick="openCourseDetail('初中数学核心素养培养策略', '初中 / 数学 / 教学方法', '李芳华', 'pdf')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8F0E4"/><stop offset="100%" style="stop-color:#D0E4D0"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc2)"/>
-              <rect x="80" y="25" width="180" height="70" rx="6" fill="white" opacity="0.25"/>
-              <rect x="100" y="40" width="60" height="5" rx="2.5" fill="white" opacity="0.4"/>
-              <rect x="100" y="52" width="40" height="5" rx="2.5" fill="white" opacity="0.3"/>
-              <rect x="100" y="64" width="50" height="5" rx="2.5" fill="white" opacity="0.2"/>
-              <rect x="100" y="76" width="35" height="5" rx="2.5" fill="white" opacity="0.15"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0F3A3A"/><stop offset="100%" style="stop-color:#1A6A6A"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc2)"/>
+              <circle cx="300" cy="100" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="15" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="70" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="20" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="90" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="70" cy="105" r="0.8" fill="rgba(255,255,255,0.09)"/>
+              <!-- 几何图形 -->
+              <circle cx="55" cy="40" r="18" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+              <circle cx="55" cy="40" r="3" fill="rgba(255,255,255,0.2)"/>
+              <rect x="85" y="26" width="30" height="30" rx="3" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+              <polygon points="140,55 155,30 170,55" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <line x1="140" y1="55" x2="170" y2="55" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <!-- 更多几何 -->
+              <rect x="80" y="26" width="5" height="5" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="160" cy="42" r="4" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+              <!-- 三角尺 -->
+              <polygon points="195,55 230,25 230,55" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <line x1="200" y1="50" x2="225" y2="50" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="205" y1="45" x2="225" y2="45" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- 量角器 -->
+              <path d="M250 35 A 18 18 0 0 1 250 65" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="250" y1="50" x2="265" y2="40" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="250" y1="50" x2="262" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="0.4"/>
+              <!-- 装饰点阵 -->
+              <circle cx="290" cy="45" r="2" fill="rgba(255,255,255,0.06)"/>
+              <circle cx="300" cy="55" r="1.5" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="295" cy="40" r="1" fill="rgba(255,255,255,0.05)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:#E67E22;background:#FFF3E0;">PDF文档</span>
@@ -1239,13 +1464,38 @@
         </div>
         <div class="card course-card" data-stage="高中" data-subject="英语" data-direction="教学方法" onclick="openCourseDetail('高中英语阅读教学设计', '高中 / 英语 / 教学方法', '王海燕', 'ppt')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E0ECF0"/><stop offset="100%" style="stop-color:#C8DCE8"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc3)"/>
-              <rect x="30" y="15" width="130" height="90" rx="8" fill="white" opacity="0.35"/>
-              <rect x="180" y="25" width="130" height="40" rx="6" fill="white" opacity="0.22"/>
-              <rect x="180" y="75" width="55" height="8" rx="4" fill="white" opacity="0.28"/>
-              <rect x="245" y="75" width="65" height="8" rx="4" fill="white" opacity="0.28"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A2A48"/><stop offset="100%" style="stop-color:#2A4A7A"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc3)"/>
+              <circle cx="300" cy="15" r="50" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="105" r="45" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="90" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="40" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="290" cy="100" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 打开的书 -->
+              <path d="M155 28 L155 85" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <path d="M155 35 Q135 35 130 55 Q130 75 155 85" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+              <path d="M155 35 Q175 35 180 55 Q180 75 155 85" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="138" y1="48" x2="170" y2="48" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="140" y1="55" x2="170" y2="55" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="142" y1="62" x2="168" y2="62" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 字母浮动 -->
+              <circle cx="50" cy="38" r="12" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="80" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <circle cx="35" cy="60" r="4" fill="rgba(255,255,255,0.04)"/>
+              <!-- 地球仪 -->
+              <circle cx="220" cy="50" r="22" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+              <ellipse cx="220" cy="50" rx="10" ry="22" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="220" y1="28" x2="220" y2="32" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="220" y1="70" x2="220" y2="75" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <!-- 地球仪底座 -->
+              <rect x="212" y="73" width="16" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
+              <!-- 装饰点 -->
+              <circle cx="270" cy="38" r="3" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="280" cy="35" r="2" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="265" cy="42" r="1.5" fill="rgba(255,255,255,0.04)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:#2980B9;background:#E3F2FD;">PPT课件</span>
@@ -1253,15 +1503,37 @@
         </div>
         <div class="card course-card" data-stage="初中" data-subject="语文" data-direction="教材解析" onclick="openCourseDetail('初中语文教材深度解析', '初中 / 语文 / 教材解析', '陈卫国', 'video')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D8ECE0"/><stop offset="100%" style="stop-color:#C0E0CC"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc4)"/>
-              <circle cx="290" cy="20" r="45" fill="white" opacity="0.12"/>
-              <circle cx="40" cy="95" r="30" fill="white" opacity="0.1"/>
-              <rect x="130" y="25" width="80" height="70" rx="8" fill="white" opacity="0.25"/>
-              <rect x="145" y="40" width="25" height="6" rx="3" fill="white" opacity="0.35"/>
-              <rect x="145" y="54" width="35" height="6" rx="3" fill="white" opacity="0.25"/>
-              <rect x="145" y="68" width="20" height="6" rx="3" fill="white" opacity="0.18"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#143820"/><stop offset="100%" style="stop-color:#226048"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc4)"/>
+              <circle cx="30" cy="100" r="45" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="280" cy="20" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="80" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="50" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="150" cy="15" r="0.8" fill="rgba(255,255,255,0.09)"/>
+              <!-- 放大镜 -->
+              <circle cx="60" cy="45" r="22" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.8"/>
+              <circle cx="60" cy="45" r="17" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="60" cy="45" r="20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="3"/>
+              <rect x="75" y="58" width="4" height="18" rx="2" fill="rgba(255,255,255,0.12)"/>
+              <!-- 书本 -->
+              <path d="M130 25 L130 85" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+              <path d="M130 30 Q110 30 105 55 Q105 75 130 85" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+              <path d="M130 30 Q150 30 155 55 Q155 75 130 85" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="115" y1="44" x2="148" y2="44" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="117" y1="52" x2="146" y2="52" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
+              <line x1="120" y1="60" x2="143" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- 笔迹批注 -->
+              <path d="M175 35 Q182 30 188 38 Q194 46 200 35" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linecap="round"/>
+              <path d="M178 55 Q185 50 192 58 Q198 64 205 54" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
+              <path d="M182 72 Q190 66 198 74 Q205 80 212 70" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8" stroke-linecap="round"/>
+              <!-- 荧光笔标记 -->
+              <rect x="175" y="46" width="35" height="3" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+              <!-- 装饰 -->
+              <circle cx="260" cy="55" r="10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="260" cy="55" r="6" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.6"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
@@ -1269,12 +1541,41 @@
         </div>
         <div class="card course-card" data-stage="小学" data-subject="数学" data-direction="教学方法" onclick="openCourseDetail('小学数学思维训练方法', '小学 / 数学 / 教学方法', '刘建国', 'ppt')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8F0E4"/><stop offset="100%" style="stop-color:#D0E4D0"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc5)"/>
-              <circle cx="60" cy="60" r="40" fill="white" opacity="0.15"/>
-              <circle cx="280" cy="30" r="25" fill="white" opacity="0.12"/>
-              <rect x="120" y="25" width="100" height="70" rx="8" fill="white" opacity="0.22"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3A2A10"/><stop offset="100%" style="stop-color:#6A4A20"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc5)"/>
+              <circle cx="290" cy="100" r="50" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="15" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="20" r="1.2" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="90" r="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="310" cy="110" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 灯泡 -->
+              <path d="M55 28 Q40 28 40 46 Q40 56 50 62 L50 66 Q50 68 54 68 L66 68 Q70 68 70 66 L70 62 Q80 56 80 46 Q80 28 55 28Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+              <line x1="48" y1="72" x2="72" y2="72" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-linecap="round"/>
+              <!-- 灯泡光芒 -->
+              <line x1="30" y1="42" x2="35" y2="42" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="32" y1="48" x2="36" y2="48" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+              <line x1="84" y1="42" x2="90" y2="42" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="84" y1="48" x2="88" y2="48" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+              <!-- 魔方 -->
+              <rect x="100" y="35" width="36" height="36" rx="3" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <line x1="112" y1="35" x2="112" y2="71" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="100" y1="47" x2="136" y2="47" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="100" y1="59" x2="136" y2="59" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <rect x="103" y="38" width="7" height="7" rx="1" fill="rgba(255,255,255,0.1)"/>
+              <rect x="115" y="38" width="7" height="7" rx="1" fill="rgba(255,255,255,0.06)"/>
+              <rect x="127" y="38" width="7" height="7" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="103" y="50" width="7" height="7" rx="1" fill="rgba(255,255,255,0.05)"/>
+              <rect x="115" y="50" width="7" height="7" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="127" y="62" width="7" height="7" rx="1" fill="rgba(255,255,255,0.04)"/>
+              <!-- 问号 -->
+              <circle cx="175" cy="50" r="14" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <!-- 装饰 -->
+              <circle cx="260" cy="45" r="8" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="260" cy="45" r="4" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="280" cy="60" r="3" fill="rgba(255,255,255,0.04)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:#2980B9;background:#E3F2FD;">PPT课件</span>
@@ -1282,11 +1583,38 @@
         </div>
         <div class="card course-card" data-stage="高中" data-subject="数学" data-direction="新课标培训" onclick="openCourseDetail('高中数学新课标变化解析', '高中 / 数学 / 新课标培训', '周文博', 'video')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D8E8F0"/><stop offset="100%" style="stop-color:#C0D8E8"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc6)"/>
-              <polygon points="155,30 175,60 135,60" fill="white" opacity="0.45"/>
-              <rect x="150" y="68" width="16" height="30" rx="3" fill="white" opacity="0.3"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A2840"/><stop offset="100%" style="stop-color:#284868"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc6)"/>
+              <circle cx="300" cy="15" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="105" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="90" r="1.2" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="30" r="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="280" cy="105" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 坐标轴 -->
+              <line x1="40" y1="85" x2="40" y2="25" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <polygon points="36,28 40,22 44,28" fill="rgba(255,255,255,0.12)"/>
+              <line x1="40" y1="85" x2="130" y2="85" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <polygon points="127,81 133,85 127,89" fill="rgba(255,255,255,0.1)"/>
+              <!-- 网格点 -->
+              <circle cx="60" cy="65" r="0.8" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="80" cy="55" r="0.8" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="100" cy="60" r="0.8" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="70" cy="75" r="0.8" fill="rgba(255,255,255,0.04)"/>
+              <!-- 曲线对比 -->
+              <path d="M45 75 Q55 60 65 55 Q80 50 90 65 Q100 78 110 55 Q120 40 130 45" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M45 70 Q58 65 65 60 Q80 58 90 50 Q100 42 110 55 Q120 65 130 50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round" stroke-dasharray="3,3"/>
+              <!-- 变化箭头 -->
+              <rect x="160" y="52" width="50" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
+              <polygon points="210,54 218,45 218,63" fill="rgba(255,255,255,0.12)"/>
+              <!-- 第二个箭头 -->
+              <rect x="160" y="62" width="40" height="3" rx="1.5" fill="rgba(255,255,255,0.04)"/>
+              <polygon points="200,63.5 206,57 206,70" fill="rgba(255,255,255,0.07)"/>
+              <!-- 装饰 -->
+              <circle cx="250" cy="45" r="14" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="250" cy="45" r="9" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
@@ -1294,13 +1622,39 @@
         </div>
         <div class="card course-card" data-stage="初中" data-subject="英语" data-direction="考试评价" onclick="openCourseDetail('初中英语学业质量评价体系', '初中 / 英语 / 考试评价', '赵晓燕', 'pdf')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F0ECF0"/><stop offset="100%" style="stop-color:#E4D8E4"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc7)"/>
-              <rect x="80" y="25" width="180" height="70" rx="6" fill="white" opacity="0.25"/>
-              <rect x="100" y="40" width="80" height="5" rx="2.5" fill="white" opacity="0.4"/>
-              <rect x="100" y="52" width="60" height="5" rx="2.5" fill="white" opacity="0.3"/>
-              <rect x="100" y="64" width="70" height="5" rx="2.5" fill="white" opacity="0.2"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#302040"/><stop offset="100%" style="stop-color:#503870"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc7)"/>
+              <circle cx="300" cy="100" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="20" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="330" cy="30" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="100" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="270" cy="15" r="0.8" fill="rgba(255,255,255,0.09)"/>
+              <!-- 评分表 -->
+              <rect x="35" y="25" width="100" height="60" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="60" y1="25" x2="60" y2="85" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="35" y1="40" x2="135" y2="40" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="35" y1="55" x2="135" y2="55" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="35" y1="70" x2="135" y2="70" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- 表头 -->
+              <rect x="35" y="25" width="25" height="15" rx="2" fill="rgba(255,255,255,0.04)"/>
+              <rect x="60" y="25" width="75" height="15" fill="rgba(255,255,255,0.02)"/>
+              <!-- 星星评分 -->
+              <polygon points="160,35 163,44 172,44 165,49 168,58 160,53 152,58 155,49 148,44 157,44" fill="rgba(255,255,255,0.15)"/>
+              <polygon points="182,35 185,44 194,44 187,49 190,58 182,53 174,58 177,49 170,44 179,44" fill="rgba(255,255,255,0.1)"/>
+              <polygon points="204,35 207,44 216,44 209,49 212,58 204,53 196,58 199,49 192,44 201,44" fill="rgba(255,255,255,0.06)"/>
+              <!-- 对勾圆圈 -->
+              <circle cx="170" cy="75" r="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <path d="M164 75 L168 79 L176 71" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- 进度条 -->
+              <rect x="155" y="90" width="60" height="3" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+              <rect x="155" y="90" width="42" height="3" rx="1.5" fill="rgba(255,255,255,0.14)"/>
+              <!-- 装饰 -->
+              <circle cx="250" cy="55" r="12" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="250" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <circle cx="280" cy="48" r="3" fill="rgba(255,255,255,0.04)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:#E67E22;background:#FFF3E0;">PDF文档</span>
@@ -1308,11 +1662,32 @@
         </div>
         <div class="card course-card" data-stage="小学" data-subject="英语" data-direction="新课标培训" onclick="openCourseDetail('小学英语新课标教学建议', '小学 / 英语 / 新课标培训', '马丽萍', 'video-ext')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E8F0E8"/><stop offset="100%" style="stop-color:#D0E4D4"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc8)"/>
-              <circle cx="290" cy="20" r="45" fill="white" opacity="0.1"/>
-              <rect x="130" y="25" width="80" height="70" rx="8" fill="white" opacity="0.22"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#183840"/><stop offset="100%" style="stop-color:#2A6070"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc8)"/>
+              <circle cx="30" cy="100" r="45" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="290" cy="20" r="45" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="80" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="30" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="300" cy="100" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 对话气泡 -->
+              <path d="M55 40 Q40 40 40 55 L40 75 Q40 80 45 80 L65 80 L75 95 L70 80 L80 80 Q85 80 85 75 L85 55 Q85 40 70 40Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <!-- 小气泡 -->
+              <circle cx="105" cy="35" r="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <circle cx="120" cy="28" r="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <!-- 地球仪 -->
+              <circle cx="160" cy="52" r="24" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+              <ellipse cx="160" cy="52" rx="11" ry="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="160" y1="28" x2="160" y2="34" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <!-- 装饰环 -->
+              <circle cx="210" cy="45" r="18" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="210" cy="45" r="12" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 装饰点 -->
+              <circle cx="240" cy="28" r="3" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="250" cy="32" r="2" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="245" cy="22" r="1.5" fill="rgba(255,255,255,0.04)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:var(--green-600);background:var(--green-100);">视频课程</span>
@@ -1320,13 +1695,37 @@
         </div>
         <div class="card course-card" data-stage="高中" data-subject="语文" data-direction="教材解析" onclick="openCourseDetail('高中语文统编教材使用指导', '高中 / 语文 / 教材解析', '孙建军', 'ppt')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#DCEFE4"/><stop offset="100%" style="stop-color:#C0E0CC"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc9)"/>
-              <rect x="30" y="15" width="130" height="90" rx="8" fill="white" opacity="0.3"/>
-              <rect x="180" y="25" width="130" height="35" rx="6" fill="white" opacity="0.2"/>
-              <rect x="180" y="70" width="55" height="7" rx="3.5" fill="white" opacity="0.25"/>
-              <rect x="245" y="70" width="65" height="7" rx="3.5" fill="white" opacity="0.25"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#2A2010"/><stop offset="100%" style="stop-color:#5A4020"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc9)"/>
+              <circle cx="300" cy="15" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="100" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="330" cy="70" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="40" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="270" cy="100" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 统编教材 -->
+              <rect x="40" y="35" width="50" height="55" rx="3" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+              <line x1="46" y1="45" x2="84" y2="45" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="46" y1="53" x2="84" y2="53" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="46" y1="61" x2="80" y2="61" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+              <line x1="46" y1="69" x2="84" y2="69" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+              <rect x="46" y="75" width="38" height="8" rx="1" fill="rgba(255,255,255,0.05)"/>
+              <!-- 指引箭头 -->
+              <circle cx="115" cy="62" r="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <path d="M118 52 L112 60 Q110 68 114 74 L118 74" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8" stroke-linecap="round"/>
+              <path d="M116 52 L106 58" stroke="rgba(255,255,255,0.06)" stroke-width="0.6" stroke-linecap="round"/>
+              <!-- 书堆 -->
+              <rect x="160" y="72" width="70" height="8" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <rect x="158" y="65" width="68" height="8" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+              <rect x="162" y="58" width="64" height="8" rx="2" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>
+              <!-- 书堆装饰线 -->
+              <line x1="170" y1="62" x2="218" y2="62" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+              <line x1="168" y1="69" x2="220" y2="69" stroke="rgba(255,255,255,0.04)" stroke-width="0.4"/>
+              <!-- 装饰 -->
+              <circle cx="270" cy="50" r="16" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="270" cy="50" r="10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.6"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:#2980B9;background:#E3F2FD;">PPT课件</span>
@@ -1334,11 +1733,49 @@
         </div>
         <div class="card course-card" data-stage="小学" data-subject="语文" data-direction="课程开发" onclick="openCourseDetail('小学语文校本课程开发实践', '小学 / 语文 / 课程开发', '黄晓琳', 'pdf')">
           <div class="cover">
-            <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="gc10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F0F0E8"/><stop offset="100%" style="stop-color:#E8E8D0"/></linearGradient></defs>
-              <rect width="340" height="120" fill="url(#gc10)"/>
-              <circle cx="40" cy="95" r="35" fill="white" opacity="0.12"/>
-              <polygon points="155,30 175,60 135,60" fill="white" opacity="0.35"/>
+            <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="gc10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A3020"/><stop offset="100%" style="stop-color:#3A6040"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#gc10)"/>
+              <circle cx="300" cy="100" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="15" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="330" cy="30" r="1.2" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="95" r="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="310" cy="115" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 学校建筑 -->
+              <rect x="40" y="38" width="50" height="40" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <rect x="48" y="48" width="12" height="12" rx="1" fill="rgba(255,255,255,0.06)"/>
+              <rect x="66" y="48" width="12" height="12" rx="1" fill="rgba(255,255,255,0.04)"/>
+              <rect x="54" y="28" width="22" height="14" rx="1" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <!-- 学校门 -->
+              <rect x="58" y="68" width="14" height="10" rx="1" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <!-- 齿轮 -->
+              <circle cx="130" cy="50" r="12" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+              <circle cx="130" cy="50" r="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="130" y1="38" x2="130" y2="40" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="130" y1="60" x2="130" y2="62" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="118" y1="50" x2="120" y2="50" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="140" y1="50" x2="142" y2="50" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="122" y1="42" x2="124" y2="43" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="136" y1="42" x2="138" y2="43" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="122" y1="58" x2="124" y2="57" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="136" y1="58" x2="138" y2="57" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <!-- 成长树 -->
+              <line x1="190" y1="75" x2="190" y2="55" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+              <line x1="190" y1="70" x2="180" y2="63" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <line x1="190" y1="65" x2="200" y2="58" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="190" cy="50" r="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <circle cx="185" cy="45" r="5" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="195" cy="46" r="4" fill="rgba(255,255,255,0.04)"/>
+              <!-- 小树苗 -->
+              <line x1="230" y1="75" x2="230" y2="62" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="230" cy="58" r="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <circle cx="226" cy="55" r="3" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="234" cy="56" r="2.5" fill="rgba(255,255,255,0.02)"/>
+              <!-- 装饰 -->
+              <circle cx="275" cy="45" r="8" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="275" cy="45" r="4" fill="rgba(255,255,255,0.03)"/>
             </svg>
           </div>
           <span class="course-type-badge" style="color:#E67E22;background:#FFF3E0;">PDF文档</span>
@@ -1357,16 +1794,46 @@
     <!-- 课程详情 -->
     <div class="page sub-page" id="page-course-detail" style="display:none;">
       <div class="detail-cover" id="courseDetailCover">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="gcd" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D0F0DC"/><stop offset="100%" style="stop-color:#8DD8A8"/></linearGradient></defs>
-          <rect width="340" height="180" fill="url(#gcd)"/>
-          <circle cx="270" cy="40" r="60" fill="white" opacity="0.1"/>
-          <circle cx="60" cy="140" r="40" fill="white" opacity="0.1"/>
-          <polygon points="158,50 190,95 126,95" fill="white" opacity="0.45"/>
-          <circle cx="126" cy="95" r="22" fill="white" opacity="0.2"/>
-          <circle cx="190" cy="95" r="22" fill="white" opacity="0.2"/>
+<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="gcd" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A3A58"/><stop offset="100%" style="stop-color:#2E6090"/></linearGradient></defs>
+          <rect width="340" height="150" fill="url(#gcd)"/>
+          <circle cx="30" cy="30" r="80" fill="rgba(255,255,255,0.03)"/>
+          <circle cx="310" cy="160" r="60" fill="rgba(255,255,255,0.02)"/>
+          <circle cx="170" cy="90" r="110" fill="rgba(255,255,255,0.015)"/>
+          <circle cx="50" cy="140" r="40" fill="rgba(255,255,255,0.02)"/>
+          <!-- 散落光点 -->
+          <circle cx="280" cy="25" r="1.5" fill="rgba(255,255,255,0.1)"/>
+          <circle cx="30" cy="80" r="1" fill="rgba(255,255,255,0.08)"/>
+          <circle cx="320" cy="100" r="1.2" fill="rgba(255,255,255,0.09)"/>
+          <circle cx="70" cy="20" r="1" fill="rgba(255,255,255,0.1)"/>
+          <circle cx="260" cy="130" r="1" fill="rgba(255,255,255,0.08)"/>
+          <!-- 播放按钮居中 -->
+          <circle cx="170" cy="70" r="38" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <circle cx="170" cy="70" r="44" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <circle cx="170" cy="70" r="50" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <polygon points="158,52 158,88 188,70" fill="rgba(255,255,255,0.25)"/>
+          <!-- 声波 -->
+          <path d="M68 65 Q62 70 62 78" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8" stroke-linecap="round"/>
+          <path d="M64 58 Q56 66 56 78 Q56 90 64 98" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.6" stroke-linecap="round"/>
+          <path d="M272 65 Q278 70 278 78" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8" stroke-linecap="round"/>
+          <path d="M276 58 Q284 66 284 78 Q284 90 276 98" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.6" stroke-linecap="round"/>
+          <!-- 进度条 -->
+          <rect x="100" y="125" width="140" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+          <rect x="100" y="125" width="60" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="160" cy="127" r="5" fill="rgba(255,255,255,0.25)"/>
+          <!-- 时间标记 -->
+          <circle cx="120" cy="139" r="2" fill="rgba(255,255,255,0.08)"/>
+          <circle cx="180" cy="139" r="2" fill="rgba(255,255,255,0.06)"/>
+          <circle cx="220" cy="139" r="2" fill="rgba(255,255,255,0.06)"/>
+          <!-- 底部装饰点 -->
+          <circle cx="110" cy="150" r="28" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <circle cx="110" cy="150" r="20" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <circle cx="110" cy="150" r="12" fill="rgba(255,255,255,0.03)"/>
+          <!-- 顶部装饰线 -->
+          <line x1="30" y1="18" x2="60" y2="18" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="280" y1="18" x2="310" y2="18" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
         </svg>
-      </div>
+</div>
       <h3 style="font-size:18px;color:var(--text-primary);margin:10px 0 2px;font-weight:700;" id="courseDetailTitle"></h3>
       <div class="detail-meta" id="courseDetailTags"></div>
       <p style="font-size:13px;color:var(--text-muted);" id="courseDetailSpeaker"></p>
@@ -1678,7 +2145,6 @@
             </span>
             <span>点击上传</span>
           </div>
-          <div class="ref-img"><svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/><line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text></svg></div>
         </div>
       </div>
       <div class="form-group">
@@ -1690,7 +2156,6 @@
             </span>
             <span>点击上传</span>
           </div>
-          <div class="ref-img"><svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/><line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text></svg></div>
         </div>
       </div>
       <div class="form-group">
@@ -1701,7 +2166,6 @@
               <span class="upload-thumb-add">+<br><span style="font-size:11px;opacity:0.7;">添加照片</span></span>
             </div>
           </div>
-          <div class="ref-img"><svg width="72" height="92" viewBox="0 0 72 92" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="71" height="91" rx="2" fill="#FFFEF9" stroke="#D8D3C0" stroke-width="1"/><line x1="10" y1="22" x2="56" y2="22" stroke="#D8D3C0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="30" x2="62" y2="30" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="38" x2="58" y2="38" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="46" x2="60" y2="46" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/><text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text></svg></div>
         </div>
       </div>
       <div class="section-title">收件信息</div>
@@ -1812,7 +2276,6 @@ var BOOK_PAGE_SVG = '<svg width="72" height="92" viewBox="0 0 72 92" xmlns="http
   + '<line x1="10" y1="54" x2="18" y2="54" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
   + '<line x1="10" y1="62" x2="62" y2="62" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
   + '<line x1="10" y1="70" x2="36" y2="70" stroke="#E8E2D0" stroke-width="1.5" stroke-linecap="round"/>'
-  + '<text x="36" y="84" text-anchor="middle" font-size="8" fill="#C0B898">36</text>'
   + '</svg>';
 let currentTab = 'signup';
 let currentSubPage = null;
@@ -2050,9 +2513,136 @@ function selectDistrict(d) {
 }
 
 // ============ Signup Detail ============
+const signupCovers = {
+  '2024年湖南省中小学骨干教师培训': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#0F3B24"/>
+                <stop offset="100%" style="stop-color:#1B5C3A"/>
+              </linearGradient>
+            </defs>
+            <rect width="340" height="150" fill="url(#sg1)"/>
+            <!-- 背景纹理 -->
+            <circle cx="300" cy="15" r="80" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="20" cy="140" r="60" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="180" cy="75" r="90" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="160" cy="130" r="40" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="310" cy="100" r="30" fill="rgba(255,255,255,0.015)"/>
+            <!-- 散落光点 -->
+            <circle cx="270" cy="20" r="1.5" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="290" cy="50" r="1" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="320" cy="70" r="1.2" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="15" cy="30" r="1" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="50" cy="130" r="1.5" fill="rgba(255,255,255,0.08)"/>
+            <!-- 窗户 -->
+            <rect x="260" y="15" width="50" height="55" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <line x1="285" y1="15" x2="285" y2="70" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <line x1="260" y1="42" x2="310" y2="42" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <!-- 黑板 -->
+            <rect x="30" y="15" width="130" height="75" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <rect x="40" y="22" width="110" height="28" rx="2" fill="rgba(255,255,255,0.05)"/>
+            <line x1="48" y1="29" x2="142" y2="29" stroke="rgba(255,255,255,0.18)" stroke-width="1.2"/>
+            <line x1="48" y1="36" x2="135" y2="36" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="48" y1="43" x2="140" y2="43" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <line x1="55" y1="74" x2="150" y2="74" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <!-- 粉笔 -->
+            <rect x="35" y="80" width="12" height="3" rx="1.5" fill="rgba(255,255,255,0.2)" transform="rotate(15,41,81.5)"/>
+            <rect x="55" y="78" width="10" height="3" rx="1.5" fill="rgba(255,255,255,0.12)" transform="rotate(-10,60,79.5)"/>
+            <!-- 讲台 -->
+            <rect x="35" y="95" width="120" height="30" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <rect x="55" y="100" width="35" height="20" rx="2" fill="rgba(255,255,255,0.1)"/>
+            <rect x="95" y="102" width="14" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
+            <!-- 盆栽 -->
+            <rect x="155" y="100" width="10" height="12" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+            <circle cx="160" cy="92" r="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <circle cx="156" cy="88" r="5" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="165" cy="90" r="4" fill="rgba(255,255,255,0.03)"/>
+            <!-- 学生区—课桌1 -->
+            <rect x="175" y="32" width="62" height="45" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <rect x="182" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.1)"/>
+            <rect x="210" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <!-- 课桌2 -->
+            <rect x="250" y="32" width="62" height="45" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+            <rect x="257" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <rect x="285" y="36" width="20" height="14" rx="2" fill="rgba(255,255,255,0.06)"/>
+            <!-- 小人1 -->
+            <circle cx="195" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <path d="M190 92 Q195 88 200 92 L198 105 L192 105 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+            <!-- 小人2 -->
+            <circle cx="225" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M220 92 Q225 88 230 92 L228 105 L222 105 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <!-- 小人3 -->
+            <circle cx="260" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M255 92 Q260 88 265 92 L263 105 L257 105 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+            <!-- 小人4 -->
+            <circle cx="290" cy="82" r="5" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <path d="M285 92 Q290 88 295 92 L293 105 L287 105 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+          </svg>`,
+  '新课程标准解读与实践研讨会': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1A3A58"/>
+                <stop offset="100%" style="stop-color:#2A5A88"/>
+              </linearGradient>
+            </defs>
+            <rect width="340" height="150" fill="url(#sg2)"/>
+            <circle cx="30" cy="20" r="70" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="310" cy="130" r="60" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="170" cy="75" r="100" fill="rgba(255,255,255,0.015)"/>
+            <circle cx="280" cy="25" r="35" fill="rgba(255,255,255,0.02)"/>
+            <!-- 散落光点 -->
+            <circle cx="15" cy="90" r="1.5" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="300" cy="50" r="1" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="180" cy="130" r="1.2" fill="rgba(255,255,255,0.09)"/>
+            <circle cx="320" cy="110" r="1" fill="rgba(255,255,255,0.1)"/>
+            <!-- 打开的书 -->
+            <path d="M40 35 Q40 70 75 95 Q75 70 40 35Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <path d="M110 35 Q110 70 75 95 Q75 70 110 35Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="50" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+            <line x1="52" y1="58" x2="98" y2="58" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+            <line x1="54" y1="66" x2="96" y2="66" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+            <line x1="58" y1="74" x2="92" y2="74" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+            <!-- 书签 -->
+            <rect x="72" y="78" width="6" height="18" rx="1" fill="rgba(255,255,255,0.12)"/>
+            <!-- 放大镜 -->
+            <circle cx="155" cy="55" r="18" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.8"/>
+            <circle cx="155" cy="55" r="14" fill="rgba(255,255,255,0.06)"/>
+            <line x1="168" y1="68" x2="185" y2="85" stroke="rgba(255,255,255,0.15)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- 放大镜光效 -->
+            <circle cx="155" cy="55" r="16" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="4"/>
+            <!-- 对勾文档 -->
+            <rect x="195" y="35" width="50" height="65" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <line x1="203" y1="48" x2="237" y2="48" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+            <line x1="203" y1="56" x2="233" y2="56" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="203" y1="64" x2="237" y2="64" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <path d="M210 76 L218 84 L234 68" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- 尺子 -->
+            <rect x="195" y="105" width="55" height="6" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+            <line x1="202" y1="105" x2="202" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="210" y1="105" x2="210" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="218" y1="105" x2="218" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="226" y1="105" x2="226" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="234" y1="105" x2="234" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <line x1="242" y1="105" x2="242" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="0.4"/>
+            <!-- 教育图标 -->
+            <rect x="260" y="50" width="50" height="50" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <path d="M268 62 L285 52 L302 62 L285 72Z" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" stroke-linejoin="round"/>
+            <line x1="268" y1="62" x2="268" y2="78" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="302" y1="62" x2="302" y2="78" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <circle cx="285" cy="55" r="3" fill="rgba(255,255,255,0.12)"/>
+            <!-- 装饰环 -->
+            <circle cx="130" cy="130" r="18" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <circle cx="130" cy="130" r="14" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+          </svg>`,
+};
+
 function openSignupDetail(title, time, location, status) {
-  if (status === 'ended') { showToast('该活动已结束，仅可查看详情', 'info'); return; }
+
   document.getElementById('signupDetailTitle').textContent = title;
+  // sync cover image
+  if (typeof signupCovers !== 'undefined' && signupCovers[title]) {
+    document.getElementById('signupDetailCover').innerHTML = signupCovers[title];
+  }
   document.getElementById('signupDetailMeta').innerHTML =
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:3px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
     time + ' &nbsp;' +
@@ -2116,7 +2706,6 @@ function simulateMultiUpload(addBtn) {
     '<rect width="120" height="120" fill="hsl(' + hue + ',25%,90%)"/>' +
     '<circle cx="45" cy="45" r="15" fill="hsl(' + hue + ',' + sat + '%,65%)" opacity="0.6"/>' +
     '<path d="M55 60 L85 90 L95 85 L75 55Z" fill="hsl(' + (hue+20) + ',' + sat + '%,55%)" opacity="0.5"/>' +
-    '<text x="60" y="70" text-anchor="middle" font-size="10" fill="#888">' + defectPhotoCount + '</text>' +
     '</svg>'
   );
   var img = document.createElement('img');
@@ -2160,7 +2749,6 @@ function simulateMultiUploadEvid(addBtn) {
     '<line x1="40" y1="50" x2="70" y2="50" stroke="#999" stroke-width="2" opacity="0.5"/>' +
     '<line x1="40" y1="60" x2="75" y2="60" stroke="#999" stroke-width="2" opacity="0.5"/>' +
     '<line x1="40" y1="70" x2="65" y2="70" stroke="#999" stroke-width="2" opacity="0.5"/>' +
-    '<text x="60" y="90" text-anchor="middle" font-size="9" fill="#999">' + evidencePhotoCount + '</text>' +
     '</svg>'
   );
   var img = document.createElement('img');
@@ -2303,8 +2891,351 @@ function handleSubmit(type) {
   }, 1000);
 }
 
+// Course cover SVG map (title -> detail page cover SVG)
+var courseCovers = {
+  '小学语文新课标解读': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc01" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0F3B24"/><stop offset="100%" style="stop-color:#1D6A3F"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc01)"/>
+              <circle cx="300" cy="15" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="110" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="70" fill="rgba(255,255,255,0.015)"/>
+              <circle cx="270" cy="95" r="25" fill="rgba(255,255,255,0.02)"/>
+              <!-- 散落光点 -->
+              <circle cx="20" cy="25" r="1" fill="rgba(255,255,255,0.12)"/>
+              <circle cx="310" cy="60" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="260" cy="105" r="0.8" fill="rgba(255,255,255,0.1)"/>
+              <!-- 语文书打开 -->
+              <path d="M50 25 Q50 55 80 75 Q80 55 50 25Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="0.8"/>
+              <path d="M110 25 Q110 55 80 75 Q80 55 110 25Z" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="58" y1="36" x2="102" y2="36" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+              <line x1="60" y1="44" x2="100" y2="44" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="62" y1="52" x2="98" y2="52" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <line x1="55" y1="60" x2="105" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 拼音装饰环 -->
+              <circle cx="145" cy="40" r="16" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="155" cy="52" r="8" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 笔 -->
+              <rect x="145" y="62" width="4" height="38" rx="2" fill="rgba(255,255,255,0.12)"/>
+              <polygon points="145,62 149,62 147,52" fill="rgba(255,255,255,0.1)"/>
+              <rect x="160" y="62" width="4" height="30" rx="2" fill="rgba(255,255,255,0.08)"/>
+              <polygon points="160,62 164,62 162,54" fill="rgba(255,255,255,0.06)"/>
+              <!-- 田字格 -->
+              <rect x="200" y="45" width="40" height="40" rx="2" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+              <line x1="220" y1="45" x2="220" y2="85" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+              <line x1="200" y1="65" x2="240" y2="65" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+              <!-- 装饰点 -->
+              <circle cx="280" cy="50" r="6" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+              <circle cx="285" cy="60" r="3" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="275" cy="65" r="2" fill="rgba(255,255,255,0.03)"/>
+            </svg>`,
+  '初中数学核心素养培养策略': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc02" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0F3A3A"/><stop offset="100%" style="stop-color:#1A6A6A"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc02)"/>
+              <circle cx="300" cy="100" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="15" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="70" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="20" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="90" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="70" cy="105" r="0.8" fill="rgba(255,255,255,0.09)"/>
+              <!-- 几何图形 -->
+              <circle cx="55" cy="40" r="18" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+              <circle cx="55" cy="40" r="3" fill="rgba(255,255,255,0.2)"/>
+              <rect x="85" y="26" width="30" height="30" rx="3" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+              <polygon points="140,55 155,30 170,55" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+              <line x1="140" y1="55" x2="170" y2="55" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <!-- 更多几何 -->
+              <rect x="80" y="26" width="5" height="5" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="160" cy="42" r="4" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+              <!-- 三角尺 -->
+              <polygon points="195,55 230,25 230,55" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <line x1="200" y1="50" x2="225" y2="50" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="205" y1="45" x2="225" y2="45" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- 量角器 -->
+              <path d="M250 35 A 18 18 0 0 1 250 65" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="250" y1="50" x2="265" y2="40" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="250" y1="50" x2="262" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="0.4"/>
+              <!-- 装饰点阵 -->
+              <circle cx="290" cy="45" r="2" fill="rgba(255,255,255,0.06)"/>
+              <circle cx="300" cy="55" r="1.5" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="295" cy="40" r="1" fill="rgba(255,255,255,0.05)"/>
+            </svg>`,
+  '高中英语阅读教学设计': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc03" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A2A48"/><stop offset="100%" style="stop-color:#2A4A7A"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc03)"/>
+              <circle cx="300" cy="15" r="50" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="30" cy="105" r="45" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="90" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="40" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="290" cy="100" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 打开的书 -->
+              <path d="M155 28 L155 85" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <path d="M155 35 Q135 35 130 55 Q130 75 155 85" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+              <path d="M155 35 Q175 35 180 55 Q180 75 155 85" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="138" y1="48" x2="170" y2="48" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="140" y1="55" x2="170" y2="55" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="142" y1="62" x2="168" y2="62" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 字母浮动 -->
+              <circle cx="50" cy="38" r="12" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="80" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <circle cx="35" cy="60" r="4" fill="rgba(255,255,255,0.04)"/>
+              <!-- 地球仪 -->
+              <circle cx="220" cy="50" r="22" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+              <ellipse cx="220" cy="50" rx="10" ry="22" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="220" y1="28" x2="220" y2="32" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="220" y1="70" x2="220" y2="75" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <!-- 地球仪底座 -->
+              <rect x="212" y="73" width="16" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
+              <!-- 装饰点 -->
+              <circle cx="270" cy="38" r="3" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="280" cy="35" r="2" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="265" cy="42" r="1.5" fill="rgba(255,255,255,0.04)"/>
+            </svg>`,
+  '初中语文教材深度解析': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc04" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#143820"/><stop offset="100%" style="stop-color:#226048"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc04)"/>
+              <circle cx="30" cy="100" r="45" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="280" cy="20" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="80" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="50" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="150" cy="15" r="0.8" fill="rgba(255,255,255,0.09)"/>
+              <!-- 放大镜 -->
+              <circle cx="60" cy="45" r="22" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.8"/>
+              <circle cx="60" cy="45" r="17" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="60" cy="45" r="20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="3"/>
+              <rect x="75" y="58" width="4" height="18" rx="2" fill="rgba(255,255,255,0.12)"/>
+              <!-- 书本 -->
+              <path d="M130 25 L130 85" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+              <path d="M130 30 Q110 30 105 55 Q105 75 130 85" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+              <path d="M130 30 Q150 30 155 55 Q155 75 130 85" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="115" y1="44" x2="148" y2="44" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="117" y1="52" x2="146" y2="52" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>
+              <line x1="120" y1="60" x2="143" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- 笔迹批注 -->
+              <path d="M175 35 Q182 30 188 38 Q194 46 200 35" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linecap="round"/>
+              <path d="M178 55 Q185 50 192 58 Q198 64 205 54" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
+              <path d="M182 72 Q190 66 198 74 Q205 80 212 70" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8" stroke-linecap="round"/>
+              <!-- 荧光笔标记 -->
+              <rect x="175" y="46" width="35" height="3" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+              <!-- 装饰 -->
+              <circle cx="260" cy="55" r="10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="260" cy="55" r="6" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.6"/>
+            </svg>`,
+  '小学数学思维训练方法': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc05" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3A2A10"/><stop offset="100%" style="stop-color:#6A4A20"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc05)"/>
+              <circle cx="290" cy="100" r="50" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="15" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="20" r="1.2" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="90" r="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="310" cy="110" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 灯泡 -->
+              <path d="M55 28 Q40 28 40 46 Q40 56 50 62 L50 66 Q50 68 54 68 L66 68 Q70 68 70 66 L70 62 Q80 56 80 46 Q80 28 55 28Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+              <line x1="48" y1="72" x2="72" y2="72" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-linecap="round"/>
+              <!-- 灯泡光芒 -->
+              <line x1="30" y1="42" x2="35" y2="42" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="32" y1="48" x2="36" y2="48" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+              <line x1="84" y1="42" x2="90" y2="42" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="84" y1="48" x2="88" y2="48" stroke="rgba(255,255,255,0.04)" stroke-width="0.8"/>
+              <!-- 魔方 -->
+              <rect x="100" y="35" width="36" height="36" rx="3" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <line x1="112" y1="35" x2="112" y2="71" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="100" y1="47" x2="136" y2="47" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="100" y1="59" x2="136" y2="59" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <rect x="103" y="38" width="7" height="7" rx="1" fill="rgba(255,255,255,0.1)"/>
+              <rect x="115" y="38" width="7" height="7" rx="1" fill="rgba(255,255,255,0.06)"/>
+              <rect x="127" y="38" width="7" height="7" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="103" y="50" width="7" height="7" rx="1" fill="rgba(255,255,255,0.05)"/>
+              <rect x="115" y="50" width="7" height="7" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="127" y="62" width="7" height="7" rx="1" fill="rgba(255,255,255,0.04)"/>
+              <!-- 问号 -->
+              <circle cx="175" cy="50" r="14" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <!-- 装饰 -->
+              <circle cx="260" cy="45" r="8" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="260" cy="45" r="4" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="280" cy="60" r="3" fill="rgba(255,255,255,0.04)"/>
+            </svg>`,
+  '高中数学新课标变化解析': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc06" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A2840"/><stop offset="100%" style="stop-color:#284868"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc06)"/>
+              <circle cx="300" cy="15" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="105" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="90" r="1.2" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="30" r="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="280" cy="105" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 坐标轴 -->
+              <line x1="40" y1="85" x2="40" y2="25" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <polygon points="36,28 40,22 44,28" fill="rgba(255,255,255,0.12)"/>
+              <line x1="40" y1="85" x2="130" y2="85" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <polygon points="127,81 133,85 127,89" fill="rgba(255,255,255,0.1)"/>
+              <!-- 网格点 -->
+              <circle cx="60" cy="65" r="0.8" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="80" cy="55" r="0.8" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="100" cy="60" r="0.8" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="70" cy="75" r="0.8" fill="rgba(255,255,255,0.04)"/>
+              <!-- 曲线对比 -->
+              <path d="M45 75 Q55 60 65 55 Q80 50 90 65 Q100 78 110 55 Q120 40 130 45" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M45 70 Q58 65 65 60 Q80 58 90 50 Q100 42 110 55 Q120 65 130 50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round" stroke-dasharray="3,3"/>
+              <!-- 变化箭头 -->
+              <rect x="160" y="52" width="50" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
+              <polygon points="210,54 218,45 218,63" fill="rgba(255,255,255,0.12)"/>
+              <!-- 第二个箭头 -->
+              <rect x="160" y="62" width="40" height="3" rx="1.5" fill="rgba(255,255,255,0.04)"/>
+              <polygon points="200,63.5 206,57 206,70" fill="rgba(255,255,255,0.07)"/>
+              <!-- 装饰 -->
+              <circle cx="250" cy="45" r="14" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="250" cy="45" r="9" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+            </svg>`,
+  '初中英语学业质量评价体系': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc07" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#302040"/><stop offset="100%" style="stop-color:#503870"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc07)"/>
+              <circle cx="300" cy="100" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="20" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="330" cy="30" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="100" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="270" cy="15" r="0.8" fill="rgba(255,255,255,0.09)"/>
+              <!-- 评分表 -->
+              <rect x="35" y="25" width="100" height="60" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <line x1="60" y1="25" x2="60" y2="85" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="35" y1="40" x2="135" y2="40" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <line x1="35" y1="55" x2="135" y2="55" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="35" y1="70" x2="135" y2="70" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- 表头 -->
+              <rect x="35" y="25" width="25" height="15" rx="2" fill="rgba(255,255,255,0.04)"/>
+              <rect x="60" y="25" width="75" height="15" fill="rgba(255,255,255,0.02)"/>
+              <!-- 星星评分 -->
+              <polygon points="160,35 163,44 172,44 165,49 168,58 160,53 152,58 155,49 148,44 157,44" fill="rgba(255,255,255,0.15)"/>
+              <polygon points="182,35 185,44 194,44 187,49 190,58 182,53 174,58 177,49 170,44 179,44" fill="rgba(255,255,255,0.1)"/>
+              <polygon points="204,35 207,44 216,44 209,49 212,58 204,53 196,58 199,49 192,44 201,44" fill="rgba(255,255,255,0.06)"/>
+              <!-- 对勾圆圈 -->
+              <circle cx="170" cy="75" r="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <path d="M164 75 L168 79 L176 71" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- 进度条 -->
+              <rect x="155" y="90" width="60" height="3" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+              <rect x="155" y="90" width="42" height="3" rx="1.5" fill="rgba(255,255,255,0.14)"/>
+              <!-- 装饰 -->
+              <circle cx="250" cy="55" r="12" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="250" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <circle cx="280" cy="48" r="3" fill="rgba(255,255,255,0.04)"/>
+            </svg>`,
+  '小学英语新课标教学建议': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc08" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#183840"/><stop offset="100%" style="stop-color:#2A6070"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc08)"/>
+              <circle cx="30" cy="100" r="45" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="290" cy="20" r="45" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="320" cy="80" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="15" cy="30" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="300" cy="100" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 对话气泡 -->
+              <path d="M55 40 Q40 40 40 55 L40 75 Q40 80 45 80 L65 80 L75 95 L70 80 L80 80 Q85 80 85 75 L85 55 Q85 40 70 40Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <!-- 小气泡 -->
+              <circle cx="105" cy="35" r="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <circle cx="120" cy="28" r="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <!-- 地球仪 -->
+              <circle cx="160" cy="52" r="24" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+              <ellipse cx="160" cy="52" rx="11" ry="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="160" y1="28" x2="160" y2="34" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <!-- 装饰环 -->
+              <circle cx="210" cy="45" r="18" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="210" cy="45" r="12" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.6"/>
+              <!-- 装饰点 -->
+              <circle cx="240" cy="28" r="3" fill="rgba(255,255,255,0.05)"/>
+              <circle cx="250" cy="32" r="2" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="245" cy="22" r="1.5" fill="rgba(255,255,255,0.04)"/>
+            </svg>`,
+  '高中语文统编教材使用指导': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc09" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#2A2010"/><stop offset="100%" style="stop-color:#5A4020"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc09)"/>
+              <circle cx="300" cy="15" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="100" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="330" cy="70" r="1" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="40" r="1.2" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="270" cy="100" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 统编教材 -->
+              <rect x="40" y="35" width="50" height="55" rx="3" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+              <line x1="46" y1="45" x2="84" y2="45" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="46" y1="53" x2="84" y2="53" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+              <line x1="46" y1="61" x2="80" y2="61" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+              <line x1="46" y1="69" x2="84" y2="69" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+              <rect x="46" y="75" width="38" height="8" rx="1" fill="rgba(255,255,255,0.05)"/>
+              <!-- 指引箭头 -->
+              <circle cx="115" cy="62" r="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <path d="M118 52 L112 60 Q110 68 114 74 L118 74" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8" stroke-linecap="round"/>
+              <path d="M116 52 L106 58" stroke="rgba(255,255,255,0.06)" stroke-width="0.6" stroke-linecap="round"/>
+              <!-- 书堆 -->
+              <rect x="160" y="72" width="70" height="8" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <rect x="158" y="65" width="68" height="8" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+              <rect x="162" y="58" width="64" height="8" rx="2" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>
+              <!-- 书堆装饰线 -->
+              <line x1="170" y1="62" x2="218" y2="62" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+              <line x1="168" y1="69" x2="220" y2="69" stroke="rgba(255,255,255,0.04)" stroke-width="0.4"/>
+              <!-- 装饰 -->
+              <circle cx="270" cy="50" r="16" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="270" cy="50" r="10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.6"/>
+            </svg>`,
+  '小学语文校本课程开发实践': `<svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="dc10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1A3020"/><stop offset="100%" style="stop-color:#3A6040"/></linearGradient></defs>
+              <rect width="340" height="150" fill="url(#dc10)"/>
+              <circle cx="300" cy="100" r="55" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="20" cy="15" r="40" fill="rgba(255,255,255,0.02)"/>
+              <circle cx="170" cy="60" r="75" fill="rgba(255,255,255,0.015)"/>
+              <!-- 光点 -->
+              <circle cx="330" cy="30" r="1.2" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="10" cy="95" r="1" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="310" cy="115" r="0.8" fill="rgba(255,255,255,0.07)"/>
+              <!-- 学校建筑 -->
+              <rect x="40" y="38" width="50" height="40" rx="2" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <rect x="48" y="48" width="12" height="12" rx="1" fill="rgba(255,255,255,0.06)"/>
+              <rect x="66" y="48" width="12" height="12" rx="1" fill="rgba(255,255,255,0.04)"/>
+              <rect x="54" y="28" width="22" height="14" rx="1" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+              <!-- 学校门 -->
+              <rect x="58" y="68" width="14" height="10" rx="1" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <!-- 齿轮 -->
+              <circle cx="130" cy="50" r="12" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+              <circle cx="130" cy="50" r="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+              <line x1="130" y1="38" x2="130" y2="40" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="130" y1="60" x2="130" y2="62" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="118" y1="50" x2="120" y2="50" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="140" y1="50" x2="142" y2="50" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+              <line x1="122" y1="42" x2="124" y2="43" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="136" y1="42" x2="138" y2="43" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="122" y1="58" x2="124" y2="57" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="136" y1="58" x2="138" y2="57" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <!-- 成长树 -->
+              <line x1="190" y1="75" x2="190" y2="55" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+              <line x1="190" y1="70" x2="180" y2="63" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <line x1="190" y1="65" x2="200" y2="58" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="190" cy="50" r="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              <circle cx="185" cy="45" r="5" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="195" cy="46" r="4" fill="rgba(255,255,255,0.04)"/>
+              <!-- 小树苗 -->
+              <line x1="230" y1="75" x2="230" y2="62" stroke="rgba(255,255,255,0.06)" stroke-width="0.8"/>
+              <circle cx="230" cy="58" r="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+              <circle cx="226" cy="55" r="3" fill="rgba(255,255,255,0.03)"/>
+              <circle cx="234" cy="56" r="2.5" fill="rgba(255,255,255,0.02)"/>
+              <!-- 装饰 -->
+              <circle cx="275" cy="45" r="8" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+              <circle cx="275" cy="45" r="4" fill="rgba(255,255,255,0.03)"/>
+            </svg>`,
+};
+
 // ============ Course Detail ============
 function openCourseDetail(title, tags, speaker, type) {
+  document.getElementById('courseDetailCover').innerHTML = courseCovers[title] || document.getElementById('courseDetailCover').innerHTML;
   document.getElementById('courseDetailTitle').textContent = title;
   document.getElementById('courseDetailSpeaker').innerHTML = '<span style="color:var(--text-muted);">讲座人</span> ' + speaker;
   document.getElementById('courseDetailTags').innerHTML = tags.split(' / ').map(t => '<span class="detail-tag">' + t + '</span>').join('');
@@ -2481,9 +3412,7 @@ const tlIllus = {
   /* 2005 — New curriculum, 14-city network: map with connected nodes */
   glass: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 28c2-4 6-8 12-8 4 0 10 3 14 6 6-4 12-6 16-6 6 0 10 4 12 8" fill="none" stroke="#3DAD68" stroke-width="1.2" stroke-linecap="round"/><circle cx="18" cy="28" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><circle cx="32" cy="24" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><circle cx="50" cy="20" r="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><circle cx="62" cy="28" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><circle cx="58" cy="40" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><circle cx="52" cy="52" r="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><circle cx="38" cy="54" r="3" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.8"/><circle cx="24" cy="52" r="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><circle cx="16" cy="40" r="3" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.8"/><circle cx="36" cy="38" r="5" fill="none" stroke="#5BAF74" stroke-width="1.5"/><line x1="21" y1="28" x2="29" y2="25" stroke="#B8DEC4" stroke-width="0.7"/><line x1="35" y1="24" x2="47" y2="21" stroke="#B8DEC4" stroke-width="0.7"/><line x1="53" y1="20" x2="59" y2="28" stroke="#B8DEC4" stroke-width="0.7"/><line x1="58" y1="40" x2="52" y2="49" stroke="#B8DEC4" stroke-width="0.7"/><line x1="49" y1="52" x2="41" y2="53" stroke="#B8DEC4" stroke-width="0.7"/><line x1="35" y1="54" x2="27" y2="52" stroke="#B8DEC4" stroke-width="0.7"/><line x1="21" y1="52" x2="17" y2="40" stroke="#B8DEC4" stroke-width="0.7"/><line x1="19" y1="28" x2="33" y2="36" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/><line x1="39" y1="37" x2="48" y2="21" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/><line x1="39" y1="40" x2="52" y2="52" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/><line x1="33" y1="37" x2="24" y2="52" stroke="#B8DEC4" stroke-width="0.5" stroke-dasharray="2,2"/></svg>',
   /* 2010 — 100M copies milestone + national award: trophy & celebration */
-  trophy: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26 8h28l-6 16H32l-6-16z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><path d="M4 24h18l-3 4H7l-3-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><path d="M58 24h18l-3 4H61l-3-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="18" y="2" width="44" height="6" rx="2" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><rect x="22" y="28" width="36" height="4" rx="1" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.7"/><rect x="28" y="32" width="24" height="4" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><path d="M32 36l-6 24h28l-6-24" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="24" y="60" width="32" height="4" rx="1" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><rect x="28" y="64" width="24" height="4" rx="1" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><rect x="32" y="68" width="16" height="4" rx="1" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.6"/><polygon points="40,46 13,52 13,55 40,49" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.5"/><polygon points="40,46 67,52 67,55 40,49" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.5"/><text x="40" y="56" text-anchor="middle" font-size="7" fill="#3DAD68" font-weight="700">奖</text></svg>',
   /* 2015 — 湘版教材 brand + university cooperation: academic cap + handshake */
-  star: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 48h18v-6l-9-18-9 18v6z" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><rect x="16" y="22" width="14" height="4" rx="1" fill="#D8EFE2"/><path d="M23 26v20" stroke="#B8DEC4" stroke-width="0.6"/><circle cx="23" cy="20" r="2" fill="#5BAF74"/><path d="M48 48h18v-6l-9-18-9 18v6z" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.8"/><rect x="50" y="22" width="14" height="4" rx="1" fill="#D8EFE2"/><path d="M57 26v20" stroke="#B8DEC4" stroke-width="0.6"/><circle cx="57" cy="20" r="2" fill="#5BAF74"/><path d="M30 54h20" stroke="#3DAD68" stroke-width="1" stroke-linecap="round"/><path d="M32 50c2-2 6-2 8 0" fill="none" stroke="#5BAF74" stroke-width="0.8" stroke-linecap="round"/><path d="M40 50c2-2 6-2 8 0" fill="none" stroke="#5BAF74" stroke-width="0.8" stroke-linecap="round"/><path d="M36 58v6h8v-6" fill="none" stroke="#3DAD68" stroke-width="0.8"/><rect x="10" y="64" width="60" height="6" rx="3" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.7"/><line x1="20" y1="67" x2="60" y2="67" stroke="#B8DEC4" stroke-width="0.5"/><text x="40" y="71" text-anchor="middle" font-size="6" fill="#3DAD68" font-weight="600">合作共赢</text></svg>',
   /* 2020 — Textbook revision + digital R&D center: tablet & books hybrid */
   monitor: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="44" width="20" height="26" rx="1.5" fill="#F2F8F0" stroke="#3DAD68" stroke-width="0.8"/><line x1="28" y1="50" x2="40" y2="50" stroke="#B8DEC4" stroke-width="0.6"/><line x1="28" y1="54" x2="38" y2="54" stroke="#B8DEC4" stroke-width="0.6"/><line x1="28" y1="58" x2="42" y2="58" stroke="#B8DEC4" stroke-width="0.6"/><line x1="28" y1="62" x2="36" y2="62" stroke="#B8DEC4" stroke-width="0.6"/><path d="M32 70l2 4h-4l2-4z" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.6"/><rect x="40" y="42" width="24" height="30" rx="2" fill="#EAF6EF" stroke="#3DAD68" stroke-width="0.8"/><rect x="44" y="46" width="16" height="20" rx="1" fill="#F2F8F0" stroke="#B8DEC4" stroke-width="0.5"/><circle cx="52" cy="56" r="4" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><line x1="46" y1="62" x2="58" y2="62" stroke="#B8DEC4" stroke-width="0.5"/><line x1="46" y1="65" x2="58" y2="65" stroke="#B8DEC4" stroke-width="0.5"/><path d="M52 18l-6 20h28l-6-20H52z" fill="#E4F4EA" stroke="#3DAD68" stroke-width="0.7"/><circle cx="52" cy="18" r="5" fill="#D8EFE2" stroke="#3DAD68" stroke-width="0.7"/><circle cx="52" cy="18" r="2" fill="#5BAF74"/><line x1="46" y1="28" x2="58" y2="28" stroke="#B8DEC4" stroke-width="0.5"/><line x1="44" y1="32" x2="60" y2="32" stroke="#B8DEC4" stroke-width="0.5"/></svg>',
   /* 2025 — 名师优课 resource library + advanced unit: cloud + courses */
@@ -2513,7 +3442,7 @@ function buildTimeline() {
     html += '<div class="tl-node">'
       + '<div class="tl-trigger" onclick="toggleTimelineNode(this)">'
       + '<div class="tl-year-big">' + node.year + '<span class="tl-year-suffix">年</span></div>'
-      + '<span class="tl-arrow">&#9660;</span>'
+      + '<span class="tl-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
       + '</div>'
       + '<div class="tl-card-scroll">'
       + '<div class="tl-card-inner">'
