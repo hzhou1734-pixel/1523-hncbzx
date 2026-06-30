@@ -172,9 +172,8 @@
     0%   { opacity: 0.7; transform: translateX(-16px); }
     100% { opacity: 1; transform: translateX(0); }
   }
-  .page.sub-page.anim-push { animation: subSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .page.sub-page.anim-pop  { animation: subSlideOut 0.28s cubic-bezier(0.4, 0, 0.2, 1) both; }
-  .page.anim-back { animation: parentSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .page.sub-page.anim-push { animation: subSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .page.anim-back { animation: parentSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
   /* Card stagger entrance */
   @keyframes cardStaggerIn {
@@ -2483,7 +2482,7 @@ function openSubPage(subId) {
   document.getElementById('tabBar').style.display = 'none';
   document.getElementById('contentArea').style.height = 'calc(844px - 44px - var(--header-height))';
   // Cleanup after animation (no animationend — reliable)
-  setTimeout(function(){ if(page) page.classList.remove('anim-push'); }, 350);
+  setTimeout(function(){ if(page) page.classList.remove('anim-push'); }, 280);
   triggerCardStagger(page);
 }
 
@@ -2492,19 +2491,14 @@ function closeSubPage(skipAnim) {
   var subPage = document.getElementById('page-' + currentSubPage);
   if (!subPage) { currentSubPage = null; return; }
 
-  if (skipAnim) {
-    subPage.classList.remove('active','anim-push','anim-pop');
-    subPage.style.display = 'none';
-    currentSubPage = null;
-    return;
-  }
-
-  // Play pop-out, then hide sub-page after animation
-  subPage.classList.add('anim-pop');
-  var closingPage = subPage;
+  // Instantly hide sub-page (no pop-out animation — responsiveness first)
+  subPage.classList.remove('active','anim-push','anim-pop');
+  subPage.style.display = 'none';
   currentSubPage = null;
 
-  // Immediately restore parent page (in parallel with pop-out)
+  if (skipAnim) return;
+
+  // Restore parent page with quick entrance
   document.getElementById('tabBar').style.display = 'flex';
   document.getElementById('contentArea').style.height = '';
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active','anim-enter','anim-back','anim-push','anim-pop');});
@@ -2516,14 +2510,6 @@ function closeSubPage(skipAnim) {
   var tabEl = document.querySelector('.tab-item[data-tab="' + currentTab + '"]');
   if (tabEl) tabEl.classList.add('active');
   triggerCardStagger(page);
-
-  // After pop animation completes, hide sub-page (setTimeout, not animationend)
-  setTimeout(function(){
-    if (closingPage) {
-      closingPage.classList.remove('active','anim-pop');
-      closingPage.style.display = 'none';
-    }
-  }, 300);
 }
 
 // ============ Card Stagger Entrance ============
