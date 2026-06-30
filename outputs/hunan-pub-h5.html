@@ -996,6 +996,65 @@
     0%,100% { box-shadow: 0 0 0 0 rgba(61,173,104,0.3); }
     50% { box-shadow: 0 0 0 8px rgba(61,173,104,0); }
   }
+
+  /* Search box */
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-box:focus-within {
+    border-color: var(--green-400);
+    box-shadow: 0 0 0 3px rgba(61,173,104,0.08);
+  }
+  .search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: transparent;
+    font-family: inherit;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+  .search-box .search-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  .search-box .clear-btn {
+    display: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--text-muted);
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .search-box .clear-btn:hover { background: #d0d5d1; }
+  .search-box .clear-btn.show { display: flex; }
+
+  .no-results {
+    display: none;
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .no-results svg { margin-bottom: 8px; opacity: 0.4; }
 </style>
 </head>
 <body>
@@ -1026,6 +1085,18 @@
         <h2>培训报名</h2>
         <p>选择感兴趣的培训活动，在线提交报名</p>
       </div>
+
+      <div class="search-box">
+        <span class="search-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input type="text" id="signupSearchInput" placeholder="搜索培训名称、地点…" oninput="searchSignup()">
+        <button class="clear-btn" id="signupClearBtn" onclick="clearSignupSearch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div id="signupList">
 
       <div class="card activity-card" onclick="openSignupDetail('2024年湖南省中小学骨干教师培训', '2025-07-15 ~ 2025-07-20', '长沙教育学院', 'active')">
         <div class="cover">
@@ -1243,6 +1314,13 @@
             湖南省教育科学研究院</span>
         </div>
       </div>
+
+      </div><!-- /signupList -->
+
+      <div class="no-results" id="signupNoResults">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <div>没有找到匹配的培训活动</div>
+      </div>
     </div>
 
     <!-- 报名详情 -->
@@ -1406,6 +1484,16 @@
       <div class="page-header">
         <h2>课程资料</h2>
         <p>多级筛选，精准查找培训课程</p>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input type="text" id="courseSearchInput" placeholder="搜索课程名称…" oninput="searchCourse()">
+        <button class="clear-btn" id="courseClearBtn" onclick="clearCourseSearch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
 
       <div class="filter-label">学段</div>
@@ -3399,19 +3487,67 @@ function applyCourseFilter() {
   const cards = document.querySelectorAll('#courseList .course-card');
   const empty = document.getElementById('courseEmpty');
   let visibleCount = 0;
+  const searchText = (document.getElementById('courseSearchInput').value || '').trim().toLowerCase();
 
   cards.forEach(card => {
     const stage = card.dataset.stage;
     const subject = card.dataset.subject;
     const direction = card.dataset.direction;
-    const match = (!filterState.stage || stage === filterState.stage)
+    const filterMatch = (!filterState.stage || stage === filterState.stage)
                && (!filterState.subject || subject === filterState.subject)
                && (!filterState.direction || direction === filterState.direction);
+    const searchMatch = !searchText || (card.querySelector('h4').textContent || '').toLowerCase().includes(searchText);
+    const match = filterMatch && searchMatch;
     card.style.display = match ? '' : 'none';
     if (match) visibleCount++;
   });
 
   empty.style.display = visibleCount === 0 ? '' : 'none';
+}
+
+function searchCourse() {
+  const input = document.getElementById('courseSearchInput');
+  const clearBtn = document.getElementById('courseClearBtn');
+  clearBtn.classList.toggle('show', input.value.length > 0);
+  applyCourseFilter();
+}
+
+function clearCourseSearch() {
+  const input = document.getElementById('courseSearchInput');
+  input.value = '';
+  document.getElementById('courseClearBtn').classList.remove('show');
+  applyCourseFilter();
+  input.focus();
+}
+
+// ============ Signup Search ============
+function searchSignup() {
+  const input = document.getElementById('signupSearchInput');
+  const clearBtn = document.getElementById('signupClearBtn');
+  const cards = document.querySelectorAll('#signupList .activity-card');
+  const noResults = document.getElementById('signupNoResults');
+  const searchText = (input.value || '').trim().toLowerCase();
+
+  clearBtn.classList.toggle('show', searchText.length > 0);
+
+  let visibleCount = 0;
+  cards.forEach(card => {
+    const title = (card.querySelector('h3')?.textContent || '').toLowerCase();
+    const metaText = (card.querySelector('.meta')?.textContent || '').toLowerCase();
+    const match = !searchText || title.includes(searchText) || metaText.includes(searchText);
+    card.style.display = match ? '' : 'none';
+    if (match) visibleCount++;
+  });
+
+  noResults.style.display = visibleCount === 0 ? '' : 'none';
+}
+
+function clearSignupSearch() {
+  const input = document.getElementById('signupSearchInput');
+  input.value = '';
+  document.getElementById('signupClearBtn').classList.remove('show');
+  searchSignup();
+  input.focus();
 }
 
 // Init filters on page load
