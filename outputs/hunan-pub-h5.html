@@ -142,9 +142,11 @@
   .page {
     display: none;
     padding: 18px 16px;
-    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .page.active { display: block; }
+  .page.anim-enter {
+    animation: pageSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
   .page.sub-page {
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: var(--warm-bg); z-index: 10; padding: 18px 16px;
@@ -153,10 +155,47 @@
   }
   .page.sub-page::-webkit-scrollbar { width: 0; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* Page transition micro-animations (setTimeout cleanup, no animationend) */
+  @keyframes pageSlideUp {
+    0%   { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
+  @keyframes subSlideIn {
+    0%   { opacity: 0; transform: translateX(40px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes subSlideOut {
+    0%   { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(40px); }
+  }
+  @keyframes parentSlideIn {
+    0%   { opacity: 0.7; transform: translateX(-16px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  .page.sub-page.anim-push { animation: subSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .page.sub-page.anim-pop  { animation: subSlideOut 0.28s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  .page.anim-back { animation: parentSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  /* Card stagger entrance */
+  @keyframes cardStaggerIn {
+    0%   { opacity: 0; transform: translateY(18px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .card-stagger > * {
+    opacity: 0;
+    animation: cardStaggerIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 0.06s);
+  }
+
+  /* Back button micro-interaction */
+  .back-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; margin-right: 6px; cursor: pointer;
+    border-radius: 50%; font-size: 20px; line-height: 1;
+    transition: background 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .back-btn:active { background: rgba(0,0,0,0.06); transform: scale(0.88); }
 
   /* Page title area */
   .page-header { margin-bottom: 18px; }
@@ -2421,44 +2460,99 @@ document.getElementById('tabBar').addEventListener('click', function(e) {
 // ============ Tab Navigation ============
 function switchTab(tab) {
   if (currentTab === tab && !currentSubPage) return;
-  currentTab = tab; closeSubPage();
+  currentTab = tab; closeSubPage(true);
   document.getElementById('tabBar').style.display = 'flex';
-  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
-  const targetTab = document.querySelector(`.tab-item[data-tab="${tab}"]`);
+  document.querySelectorAll('.tab-item').forEach(function(el){el.classList.remove('active');});
+  var targetTab = document.querySelector('.tab-item[data-tab="' + tab + '"]');
   if (targetTab) targetTab.classList.add('active');
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  const page = document.getElementById('page-' + tab);
-  if (page) { page.classList.add('active'); }
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active','anim-enter','anim-back','anim-push','anim-pop');});
+  var page = document.getElementById('page-' + tab);
+  if (page) { page.classList.add('active','anim-enter'); }
   document.getElementById('appHeader').innerHTML = pageNames[tab];
   document.getElementById('contentArea').scrollTop = 0;
+  triggerCardStagger(page);
 }
 
 function openSubPage(subId) {
   currentSubPage = subId;
   document.getElementById('appHeader').innerHTML = '<span class="back-btn" onclick="closeSubPage()">\u2039</span>' + (pageNames[subId] || '');
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  const page = document.getElementById('page-' + subId);
-  if (page) { page.classList.add('active'); page.style.display = 'block'; }
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active','anim-enter','anim-back','anim-push','anim-pop');});
+  var page = document.getElementById('page-' + subId);
+  if (page) { page.classList.add('active','anim-push'); page.style.display = 'block'; }
   document.getElementById('contentArea').scrollTop = 0;
   document.getElementById('tabBar').style.display = 'none';
   document.getElementById('contentArea').style.height = 'calc(844px - 44px - var(--header-height))';
+  // Cleanup after animation (no animationend — reliable)
+  setTimeout(function(){ if(page) page.classList.remove('anim-push'); }, 350);
+  triggerCardStagger(page);
 }
 
-function closeSubPage() {
+function closeSubPage(skipAnim) {
   if (!currentSubPage) return;
-  const subPage = document.getElementById('page-' + currentSubPage);
-  if (subPage) { subPage.classList.remove('active'); subPage.style.display = 'none'; }
+  var subPage = document.getElementById('page-' + currentSubPage);
+  if (!subPage) { currentSubPage = null; return; }
+
+  if (skipAnim) {
+    subPage.classList.remove('active','anim-push','anim-pop');
+    subPage.style.display = 'none';
+    currentSubPage = null;
+    return;
+  }
+
+  // Play pop-out, then hide sub-page after animation
+  subPage.classList.add('anim-pop');
+  var closingPage = subPage;
   currentSubPage = null;
+
+  // Immediately restore parent page (in parallel with pop-out)
   document.getElementById('tabBar').style.display = 'flex';
-  document.getElementById('contentArea').style.height = ''; // 恢复默认高度
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  const page = document.getElementById('page-' + currentTab);
-  if (page) page.classList.add('active');
+  document.getElementById('contentArea').style.height = '';
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active','anim-enter','anim-back','anim-push','anim-pop');});
+  var page = document.getElementById('page-' + currentTab);
+  if (page) { page.classList.add('active','anim-back'); }
   document.getElementById('appHeader').innerHTML = pageNames[currentTab];
   document.getElementById('contentArea').scrollTop = 0;
-  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
-  const tabEl = document.querySelector(`.tab-item[data-tab="${currentTab}"]`);
+  document.querySelectorAll('.tab-item').forEach(function(el){el.classList.remove('active');});
+  var tabEl = document.querySelector('.tab-item[data-tab="' + currentTab + '"]');
   if (tabEl) tabEl.classList.add('active');
+  triggerCardStagger(page);
+
+  // After pop animation completes, hide sub-page (setTimeout, not animationend)
+  setTimeout(function(){
+    if (closingPage) {
+      closingPage.classList.remove('active','anim-pop');
+      closingPage.style.display = 'none';
+    }
+  }, 300);
+}
+
+// ============ Card Stagger Entrance ============
+function triggerCardStagger(page) {
+  if (!page) return;
+  var containers = page.querySelectorAll('.card-stagger');
+  if (containers.length === 0) {
+    var cards = page.querySelectorAll('.card, .activity-card, .course-card, .timeline-node, .func-card, .feedback-card');
+    if (cards.length > 1) {
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].style.setProperty('--i', i);
+        cards[i].style.animation = 'none';
+        void cards[i].offsetWidth;
+        cards[i].style.animation = 'cardStaggerIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both';
+        cards[i].style.animationDelay = (i * 0.06) + 's';
+      }
+    }
+  } else {
+    for (var c = 0; c < containers.length; c++) {
+      var children = containers[c].children;
+      for (var j = 0; j < children.length; j++) {
+        children[j].style.setProperty('--i', j);
+        children[j].style.animation = 'none';
+        void children[j].offsetWidth;
+        children[j].style.animation = 'cardStaggerIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both';
+        children[j].style.animationDelay = (j * 0.06) + 's';
+      }
+    }
+  }
 }
 
 // ============ Toast with icon ============
@@ -3745,10 +3839,16 @@ function toggleFullscreen() {
 }
 
 function formatVideoTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
+  var m = Math.floor(seconds / 60);
+  var s = Math.floor(seconds % 60);
   return m + ':' + (s < 10 ? '0' : '') + s;
 }
+
+// ============ Initial load: animate first page ============
+(function initAnim() {
+  var page = document.getElementById('page-signup');
+  if (page) { page.classList.add('anim-enter'); triggerCardStagger(page); }
+})();
 </script>
 
 <!-- Activity Picker Popup -->
