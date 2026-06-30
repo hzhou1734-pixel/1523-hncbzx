@@ -2491,25 +2491,24 @@ function closeSubPage(skipAnim) {
   var subPage = document.getElementById('page-' + currentSubPage);
   if (!subPage) { currentSubPage = null; return; }
 
-  // Instantly hide sub-page (no pop-out animation — responsiveness first)
+  // Instantly hide sub-page
   subPage.classList.remove('active','anim-push','anim-pop');
   subPage.style.display = 'none';
   currentSubPage = null;
 
   if (skipAnim) return;
 
-  // Restore parent page with quick entrance
+  // Restore parent page instantly — no animation (user already saw this page)
   document.getElementById('tabBar').style.display = 'flex';
   document.getElementById('contentArea').style.height = '';
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active','anim-enter','anim-back','anim-push','anim-pop');});
   var page = document.getElementById('page-' + currentTab);
-  if (page) { page.classList.add('active','anim-back'); }
+  if (page) { page.classList.add('active'); page.style.display = ''; }
   document.getElementById('appHeader').innerHTML = pageNames[currentTab];
   document.getElementById('contentArea').scrollTop = 0;
   document.querySelectorAll('.tab-item').forEach(function(el){el.classList.remove('active');});
   var tabEl = document.querySelector('.tab-item[data-tab="' + currentTab + '"]');
   if (tabEl) tabEl.classList.add('active');
-  triggerCardStagger(page);
 }
 
 // ============ Card Stagger Entrance ============
