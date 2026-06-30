@@ -59,18 +59,44 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 2px #1a1a1a;
   }
 
-  /* Status bar */
+  /* Notch */
+  .phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 30px;
+    background: #1a1a1a;
+    border-radius: 0 0 20px 20px;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  /* Status bar — iPhone X style */
   .status-bar {
     height: 44px;
     background: var(--green-500);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 26px;
     color: white;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
+    position: relative;
   }
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .status-bar .icons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-bar .icons svg { display: block; }
 
   /* Header */
   .app-header {
@@ -975,10 +1001,17 @@
 <body>
 
 <div class="phone-frame">
+  <!-- iPhone X Notch -->
+  <div class="phone-notch"></div>
+
   <!-- Status Bar -->
   <div class="status-bar">
-    <span>9:41</span>
-    <span>5G &nbsp;▮▮▮▮ &nbsp;🔋</span>
+    <span class="time">9:41</span>
+    <span class="icons">
+      <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="8" width="3" height="4" rx="0.6" fill="white"/><rect x="4.5" y="6" width="3" height="6" rx="0.6" fill="white"/><rect x="9" y="3" width="3" height="9" rx="0.6" fill="white"/><rect x="13.5" y="0" width="3" height="12" rx="0.6" fill="white"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.5C6.1 2.5 4.3 3.3 3 4.6l1.1 1.1C5.2 4.7 6.5 4 8 4s2.8.7 3.9 1.7L13 4.6C11.7 3.3 9.9 2.5 8 2.5z" fill="white"/><path d="M8 5.5C7 5.5 6 6 5.3 6.8l1.1 1.1C6.9 7.4 7.4 7.2 8 7.2s1.1.2 1.6.7l1.1-1.1C10 6 9 5.5 8 5.5z" fill="white"/><path d="M8 8.5C7.6 8.5 7.2 8.7 7 9l1 1 1-1c-.2-.3-.6-.5-1-.5z" fill="white"/><circle cx="8" cy="10" r="1.2" fill="white"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="0.5" width="21" height="11" rx="2.5" fill="none" stroke="white" stroke-width="1" opacity="0.9"/><rect x="2" y="2.5" width="17" height="7" rx="1.2" fill="white"/><rect x="21.5" y="3.5" width="2.5" height="5" rx="1.2" fill="white" opacity="0.6"/></svg>
+    </span>
   </div>
 
   <!-- Header -->
